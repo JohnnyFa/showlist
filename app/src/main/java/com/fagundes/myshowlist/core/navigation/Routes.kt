@@ -1,0 +1,6 @@
+package com.fagundes.myshowlist.core.navigation
+
+object AppRoutes {
+    const val LOGIN = "login"
+    const val HOME = "home"
+}
