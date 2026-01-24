@@ -47,6 +47,7 @@ import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.feat.login.vm.LoginUiEvent
 import org.koin.compose.viewmodel.koinViewModel
 import android.app.Activity
+import androidx.compose.ui.draw.shadow
 
 @Composable
 fun LoginScreen(
@@ -112,9 +113,9 @@ fun LoginScreen(
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(
-                        Color(0xFF0F0F1A),
-                        Color(0xFF1C1C2E)
+                    colors = listOf(
+                        Color(0xFF0B0B0F), // quase preto
+                        Color(0xFF1C1C2E)  // azul escuro
                     )
                 )
             )
@@ -155,14 +156,13 @@ fun LoginScreen(
 }
 
 
-
 @Composable
 fun AppTitle() {
     Text(
-        text = "MovieVerse",
+        text = "PixelVision",
         style = MaterialTheme.typography.displaySmall.copy(
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 2.sp
+            fontWeight = FontWeight.ExtraBold,
+            letterSpacing = 1.5.sp
         ),
         color = Color(0xFFE50914) // vermelho cinema
     )
@@ -171,7 +171,7 @@ fun AppTitle() {
 @Composable
 fun Subtitle() {
     Text(
-        text = "Crie sua wishlist.\nAvalie. Rankee.\nViva o cinema.",
+        text = "Crie suas listas.\nAvalie.\nDescubra novas histórias.",
         style = MaterialTheme.typography.bodyLarge,
         color = Color.White.copy(alpha = 0.85f),
         textAlign = TextAlign.Center
@@ -185,14 +185,17 @@ fun GoogleLoginButton(
 ) {
     Button(
         onClick = onClick,
-        enabled = !isLoading,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
         shape = RoundedCornerShape(28.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White
-        )
+            containerColor = Color(0xFFF2F2F2)
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(28.dp)
+            )
     ) {
 
         if (isLoading) {
