@@ -53,7 +53,7 @@ fun NormalText(
 ) {
     AppText(
         text = text,
-        size = 14.sp,
+        size = size,
         weight = FontWeight.Normal,
         letterSpacing = 2.sp,
         modifier = modifier
