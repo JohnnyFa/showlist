@@ -17,18 +17,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,6 +43,12 @@ import com.fagundes.myshowlist.feat.login.vm.LoginUiEvent
 import org.koin.compose.viewmodel.koinViewModel
 import android.app.Activity
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import com.fagundes.myshowlist.components.AppText
+import com.fagundes.myshowlist.components.CaptionText
+import com.fagundes.myshowlist.components.ErrorText
+import com.fagundes.myshowlist.components.SubtitleText
+import com.fagundes.myshowlist.components.TitleText
 
 @Composable
 fun LoginScreen(
@@ -57,11 +58,8 @@ fun LoginScreen(
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // 🔑 WEB CLIENT ID (Firebase)
     val webClientId = stringResource(R.string.default_web_client_id)
-    println("WEB CLIENT ID = $webClientId")
 
-    // ✅ Google Sign-In Client
     val googleSignInClient = remember(webClientId) {
         val gso = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_SIGN_IN
@@ -77,104 +75,32 @@ fun LoginScreen(
         rememberLauncherForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
-
             if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-
             try {
                 val account = task.getResult(ApiException::class.java)
-                val idToken = account.idToken
-
-                if (idToken == null) {
-                    println("❌ ID TOKEN NULL — verifique Web Client ID / SHA-1")
-                    return@rememberLauncherForActivityResult
+                account.idToken?.let {
+                    viewModel.onGoogleTokenReceived(it)
                 }
-
-                viewModel.onGoogleTokenReceived(idToken)
-
-            } catch (e: ApiException) {
-                println("❌ Erro Google Sign-In: ${e.statusCode}")
+            } catch (_: ApiException) {
+                println("ApiException tratar depois")
             }
         }
 
-    // ✅ One-shot navigation event
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
-            when (event) {
-                LoginUiEvent.NavigateHome -> onLoginSuccess()
+            if (event is LoginUiEvent.NavigateHome) {
+                onLoginSuccess()
             }
         }
     }
 
-    // ---------- UI ----------
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF0B0B0F), // quase preto
-                        Color(0xFF1C1C2E)  // azul escuro
-                    )
-                )
-            )
-            .padding(24.dp)
-    ) {
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            AppTitle()
-            Spacer(Modifier.height(12.dp))
-            Subtitle()
-            Spacer(Modifier.height(48.dp))
-
-            GoogleLoginButton(
-                isLoading = state is LoginUiState.Loading,
-                onClick = {
-                    launcher.launch(
-                        googleSignInClient.signInIntent
-                    )
-                }
-            )
-
-            when (val uiState = state) {
-                is LoginUiState.Error -> {
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        text = uiState.message,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-
-                else -> Unit
-            }
+    LoginScreenContent(
+        state = state,
+        onLoginClick = {
+            launcher.launch(googleSignInClient.signInIntent)
         }
-    }
-}
-
-
-@Composable
-fun AppTitle() {
-    Text(
-        text = "PixelVision",
-        style = MaterialTheme.typography.displaySmall.copy(
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 1.5.sp
-        ),
-        color = Color(0xFFE50914) // vermelho cinema
-    )
-}
-
-@Composable
-fun Subtitle() {
-    Text(
-        text = "Crie suas listas.\nAvalie.\nDescubra novas histórias.",
-        style = MaterialTheme.typography.bodyLarge,
-        color = Color.White.copy(alpha = 0.85f),
-        textAlign = TextAlign.Center
     )
 }
 
@@ -185,19 +111,16 @@ fun GoogleLoginButton(
 ) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(28.dp),
+        enabled = !isLoading,
+        shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFF2F2F2)
+            containerColor = Color.White
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
-            .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(28.dp)
-            )
+            .height(54.dp)
+            .shadow(6.dp, RoundedCornerShape(14.dp))
     ) {
-
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(22.dp),
@@ -212,53 +135,125 @@ fun GoogleLoginButton(
                     tint = Color.Black
                 )
                 Spacer(Modifier.width(12.dp))
-                Text(
-                    text = "Entrar com Google",
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold
+                AppText(
+                    text = "Continue with Google",
+                    weight = FontWeight.Medium,
+                    color = Color.Black
                 )
             }
         }
     }
 }
 
+@Preview(name = "Loading")
+@Composable
+fun LoginLoadingPreview() {
+    LoginScreenContent(
+        state = LoginUiState.Loading,
+        onLoginClick = {}
+    )
+}
+
+@Preview(name = "Error")
+@Composable
+fun LoginErrorPreview() {
+    LoginScreenContent(
+        state = LoginUiState.Error("Authentication failed"),
+        onLoginClick = {}
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     LoginScreenContent(
-        state = LoginUiState.Error("Erro de autenticação")
+        state = LoginUiState.Idle,
+        onLoginClick = {}
     )
 }
 
+
 @Composable
-private fun LoginScreenContent(
-    state: LoginUiState
+fun LoginScreenContent(
+    state: LoginUiState,
+    onLoginClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-            .padding(24.dp)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF0B0B0F),
+                        Color(0xFF1C1C2E)
+                    )
+                )
+            )
+            .padding(horizontal = 24.dp)
     ) {
         Column(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            AppTitle()
-            Spacer(Modifier.height(48.dp))
+            // 🔷 ICON
+            Box(
+                modifier = Modifier
+                    .size(84.dp)
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Color(0xFFE50914),
+                                Color(0xFF9C27B0)
+                            )
+                        ),
+                        shape = RoundedCornerShape(20.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(42.dp)
+                )
+            }
 
-            GoogleLoginButton(
-                isLoading = state is LoginUiState.Loading,
-                onClick = {}
+            Spacer(Modifier.height(24.dp))
+
+            // 🅿️ TITLE
+            TitleText(
+                text = "PIXELVISION"
             )
 
+            Spacer(Modifier.height(8.dp))
+
+            // 🎬 SUBTITLE
+            SubtitleText(
+                text = "Your premium cinema experience"
+            )
+
+            Spacer(Modifier.height(48.dp))
+
+            // 🔐 BUTTON
+            GoogleLoginButton(
+                isLoading = state is LoginUiState.Loading,
+                onClick = onLoginClick
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            // 📜 TERMS
+            CaptionText(
+                text = "By continuing, you agree to our Terms & Privacy Policy"
+            )
+
+            // ❌ ERROR
             if (state is LoginUiState.Error) {
                 Spacer(Modifier.height(16.dp))
-                Text(
-                    text = state.message,
-                    color = Color.Red
-                )
+                ErrorText(text = state.message)
             }
         }
     }
