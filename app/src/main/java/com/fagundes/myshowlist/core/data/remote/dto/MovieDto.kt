@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.feat.catalog.data.remote.dto
+package com.fagundes.myshowlist.core.data.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,7 +1,7 @@
-package com.fagundes.myshowlist.feat.catalog.data.remote.api
+package com.fagundes.myshowlist.core.data.remote.api
 
 import com.fagundes.myshowlist.BuildConfig
-import com.fagundes.myshowlist.feat.catalog.data.remote.response.TmdbResponse
+import com.fagundes.myshowlist.core.data.remote.response.TmdbResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

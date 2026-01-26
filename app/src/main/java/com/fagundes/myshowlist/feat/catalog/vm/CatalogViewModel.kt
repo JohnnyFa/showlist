@@ -2,15 +2,15 @@ package com.fagundes.myshowlist.feat.catalog.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepository
-import com.fagundes.myshowlist.feat.catalog.domain.Anime
-import com.fagundes.myshowlist.feat.catalog.domain.Movie
+import com.fagundes.myshowlist.core.data.repository.ContentRepository
+import com.fagundes.myshowlist.core.domain.Anime
+import com.fagundes.myshowlist.core.domain.Movie
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CatalogViewModel(
-    private val repository: CatalogRepository
+    private val repository: ContentRepository
 ) : ViewModel() {
 
     private val _uiState =

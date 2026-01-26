@@ -1,6 +1,6 @@
-package com.fagundes.myshowlist.feat.catalog.data.remote.response
+package com.fagundes.myshowlist.core.data.remote.response
 
-import com.fagundes.myshowlist.feat.catalog.data.remote.dto.MovieDto
+import com.fagundes.myshowlist.core.data.remote.dto.MovieDto
 import kotlinx.serialization.Serializable
 
 @Serializable

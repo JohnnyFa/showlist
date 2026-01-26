@@ -1,7 +1,7 @@
-package com.fagundes.myshowlist.feat.catalog.data.mapper
+package com.fagundes.myshowlist.core.data.mapper
 
-import com.fagundes.myshowlist.feat.catalog.data.remote.dto.MovieDto
-import com.fagundes.myshowlist.feat.catalog.domain.Movie
+import com.fagundes.myshowlist.core.data.remote.dto.MovieDto
+import com.fagundes.myshowlist.core.domain.Movie
 
 fun MovieDto.toDomain(): Movie =
     Movie(

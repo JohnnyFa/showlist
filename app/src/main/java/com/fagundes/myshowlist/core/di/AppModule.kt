@@ -1,9 +1,9 @@
 package com.fagundes.myshowlist.core.di
 
-import com.fagundes.myshowlist.feat.catalog.data.remote.api.AnimeApi
-import com.fagundes.myshowlist.feat.catalog.data.remote.api.MovieApi
-import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepository
-import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepositoryImpl
+import com.fagundes.myshowlist.core.data.remote.api.AnimeApi
+import com.fagundes.myshowlist.core.data.remote.api.MovieApi
+import com.fagundes.myshowlist.core.data.repository.ContentRepository
+import com.fagundes.myshowlist.core.data.repository.ContentRepositoryImpl
 import com.fagundes.myshowlist.feat.catalog.vm.CatalogViewModel
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import com.fagundes.myshowlist.feat.login.data.FirebaseAuthRepository
@@ -58,8 +58,8 @@ val appModule = module {
     }
 
     // ---------- Catalog Repository ----------
-    single<CatalogRepository> {
-        CatalogRepositoryImpl(
+    single<ContentRepository> {
+        ContentRepositoryImpl(
             movieApi = get(),
             animeApi = get()
         )

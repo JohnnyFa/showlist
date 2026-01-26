@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.feat.catalog.domain
+package com.fagundes.myshowlist.core.domain
 
 data class Anime(
     val id: Int,
