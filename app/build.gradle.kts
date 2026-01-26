@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.kotlin.serialization)
 }
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
@@ -89,6 +90,9 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
 
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
@@ -112,6 +116,9 @@ dependencies {
 
     // Google Sign-In
     implementation(libs.play.services.auth)
+
+    // Coil
+    implementation(libs.coil.compose)
 
     // Tests
     testImplementation(libs.mockk)

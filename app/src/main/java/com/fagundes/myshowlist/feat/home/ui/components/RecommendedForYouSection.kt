@@ -19,10 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.components.NormalText
+import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.ui.theme.RecommendedPurple
 
 @Composable
-fun RecommendedForYouSection() {
+fun RecommendedForYouSection(
+    movies: List<Movie>
+) {
     Column {
         Row(
             modifier = Modifier
@@ -44,7 +47,7 @@ fun RecommendedForYouSection() {
         }
         Spacer(modifier = Modifier.height(24.dp))
         MediaCarousel(
-            items = mockItems,
+            items = movies,
             onItemClick = { /* navegar depois */ }
         )
     }

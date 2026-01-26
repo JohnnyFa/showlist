@@ -1,11 +1,16 @@
 package com.fagundes.myshowlist.core.data.mapper
 
-import com.fagundes.myshowlist.core.data.remote.dto.AnimeDto
-import com.fagundes.myshowlist.core.domain.Anime
+import com.fagundes.myshowlist.core.data.remote.dto.MovieDto
+import com.fagundes.myshowlist.core.domain.Movie
 
-fun AnimeDto.toDomain(): Anime =
-    Anime(
-        id = malId,
+
+fun MovieDto.toDomain(): Movie =
+    Movie(
+        id = id,
         title = title,
-        imageUrl = images.jpg.imageUrl
+        posterUrl = posterPath?.let {
+            "https://image.tmdb.org/t/p/w500$it"
+        },
+        rating = rating,
+        overview = overview
     )

@@ -17,4 +17,20 @@ class MovieApi(
             }
             .body()
     }
+
+    suspend fun getRecommendedMovies(): TmdbResponse {
+        return client
+            .get("https://api.themoviedb.org/3/movie/popular") {
+                parameter("api_key", BuildConfig.TMDB_API_KEY)
+            }
+            .body()
+    }
+
+    suspend fun getShowOfTheDay(): TmdbResponse {
+        return client
+            .get("https://api.themoviedb.org/3/discover/movie") {
+                parameter("api_key", BuildConfig.TMDB_API_KEY)
+            }
+            .body()
+    }
 }

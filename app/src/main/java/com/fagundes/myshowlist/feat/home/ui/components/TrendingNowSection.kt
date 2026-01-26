@@ -19,17 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.components.NormalText
-import com.fagundes.myshowlist.feat.home.domain.CarouselItemUi
-
-val mockItems = listOf(
-    CarouselItemUi("1", "Interstellar", 8.6, ""),
-    CarouselItemUi("2", "Inception", 8.4, ""),
-    CarouselItemUi("3", "Dune", 8.2, ""),
-    CarouselItemUi("4", "Blade Runner", 8.1, "")
-)
+import com.fagundes.myshowlist.core.domain.Movie
 
 @Composable
-fun TrendingNowSection() {
+fun TrendingNowSection(
+    movies: List<Movie>
+) {
     Column {
         Row(
             modifier = Modifier
@@ -51,7 +46,7 @@ fun TrendingNowSection() {
         }
         Spacer(modifier = Modifier.height(24.dp))
         MediaCarousel(
-            items = mockItems,
+            items = movies,
             onItemClick = { /* navegar depois */ }
         )
     }

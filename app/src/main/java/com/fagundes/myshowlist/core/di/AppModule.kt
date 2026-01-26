@@ -1,5 +1,6 @@
 package com.fagundes.myshowlist.core.di
 
+import android.util.Log
 import com.fagundes.myshowlist.core.data.remote.api.AnimeApi
 import com.fagundes.myshowlist.core.data.remote.api.MovieApi
 import com.fagundes.myshowlist.core.data.repository.ContentRepository
@@ -11,9 +12,17 @@ import com.fagundes.myshowlist.feat.login.domain.AuthRepository
 import com.fagundes.myshowlist.feat.login.domain.LoginWithGoogleUseCase
 import com.fagundes.myshowlist.feat.login.vm.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import io.ktor.client.plugins.logging.Logger
+import kotlinx.serialization.json.Json
+
 
 val appModule = module {
 
@@ -33,17 +42,23 @@ val appModule = module {
 
     // ---------- Ktor HttpClient ----------
     single {
-        io.ktor.client.HttpClient(io.ktor.client.engine.okhttp.OkHttp) {
-            install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
                 json(
-                    kotlinx.serialization.json.Json {
+                    Json {
                         ignoreUnknownKeys = true
+                        prettyPrint = true
                     }
                 )
             }
 
-            install(io.ktor.client.plugins.logging.Logging) {
-                level = io.ktor.client.plugins.logging.LogLevel.BODY
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("Ktor", message)
+                    }
+                }
             }
         }
     }

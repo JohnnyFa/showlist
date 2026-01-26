@@ -12,18 +12,34 @@ class ContentRepositoryImpl(
     private val animeApi: AnimeApi
 ) : ContentRepository {
 
-    override suspend fun getMovies(): Result<List<Movie>> =
+    override suspend fun getPopular(): Result<List<Movie>> =
         runCatching {
             movieApi.getPopularMovies()
                 .results
                 .map { it.toDomain() }
         }
 
+    override suspend fun getRecommended(): Result<List<Movie>> =
+        runCatching {
+            movieApi.getRecommendedMovies()
+                .results
+                .map { it.toDomain() }
+        }
+
+
     override suspend fun getAnimes(): Result<List<Anime>> =
         runCatching {
             animeApi.getTopAnimes()
                 .data
                 .map { it.toDomain() }
+        }
+
+    override suspend fun getShowOfTheDay(): Result<Movie> =
+        runCatching {
+            movieApi.getShowOfTheDay()
+                .results
+                .random()
+                .toDomain()
         }
 
 }
