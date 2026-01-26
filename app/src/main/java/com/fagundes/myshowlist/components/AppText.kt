@@ -50,13 +50,17 @@ fun NormalText(
     text: String,
     modifier: Modifier = Modifier,
     size: TextUnit = 14.sp,
+    weight: FontWeight = FontWeight.Normal,
+    align: TextAlign = TextAlign.Start,
+    letterSpacing: TextUnit = 0.sp,
 ) {
     AppText(
         text = text,
         size = size,
-        weight = FontWeight.Normal,
-        letterSpacing = 2.sp,
-        modifier = modifier
+        weight = weight,
+        letterSpacing = letterSpacing,
+        modifier = modifier,
+        align = align
     )
 }
 

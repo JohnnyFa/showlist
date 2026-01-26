@@ -1,6 +1,7 @@
 package com.fagundes.myshowlist.feat.home.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,22 +22,29 @@ import com.fagundes.myshowlist.ui.theme.RecommendedPurple
 
 @Composable
 fun RecommendedForYouSection() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = Color.Black
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color.Black
+                )
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AutoAwesome,
+                contentDescription = null,
+                tint = RecommendedPurple,
+                modifier = Modifier.size(32.dp)
             )
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Filled.AutoAwesome,
-            contentDescription = null,
-            tint = RecommendedPurple,
-            modifier = Modifier.size(32.dp)
-        )
+            Spacer(modifier = Modifier.width(12.dp))
+            NormalText(text = "For you", size = 24.sp)
+        }
         Spacer(modifier = Modifier.width(12.dp))
-        NormalText(text = "For you", size = 24.sp)
+        MediaCarousel(
+            items = mockItems,
+            onItemClick = { /* navegar depois */ }
+        )
     }
 }
