@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.feat.home.ui.components.shimmer
+package com.fagundes.myshowlist.feat.home.ui.components.skeleton
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.components.NormalText
+import com.fagundes.myshowlist.components.shimmer.ShimmerBox
 
 @Composable
 fun ShowOfTheDaySkeleton() {

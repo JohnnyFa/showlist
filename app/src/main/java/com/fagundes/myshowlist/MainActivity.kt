@@ -3,6 +3,14 @@ package com.fagundes.myshowlist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
 import com.fagundes.myshowlist.core.navigation.AppNavGraph
 import com.fagundes.myshowlist.core.navigation.AppRoutes
 import com.fagundes.myshowlist.ui.theme.MyShowListTheme
@@ -18,14 +26,22 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyShowListTheme {
-                AppNavGraph(
-                    startDestination = if (isUserLoggedIn) {
-                        AppRoutes.HOME
-                    } else {
-                        AppRoutes.LOGIN
-                    }
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .windowInsetsPadding(WindowInsets.safeDrawing)
+                ) {
+                    AppNavGraph(
+                        startDestination = if (isUserLoggedIn) {
+                            AppRoutes.MAIN
+                        } else {
+                            AppRoutes.LOGIN
+                        }
+                    )
+                }
             }
         }
+
     }
 }

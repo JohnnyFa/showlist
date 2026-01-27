@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.feat.home.ui.components.shimmer
+package com.fagundes.myshowlist.components.shimmer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.feat.home.ui.components.shimmer
+package com.fagundes.myshowlist.components.shimmer
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

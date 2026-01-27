@@ -5,8 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagundes.myshowlist.components.bottomnavigation.MainScaffold
+import com.fagundes.myshowlist.feat.catalog.ui.CatalogScreen
 import com.fagundes.myshowlist.feat.detail.ui.DetailScreen
 import com.fagundes.myshowlist.feat.detail.vm.DetailViewModel
+import com.fagundes.myshowlist.feat.home.ui.HomeScreen
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import com.fagundes.myshowlist.feat.login.ui.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
@@ -16,34 +18,56 @@ import org.koin.core.parameter.parametersOf
 fun AppNavGraph(
     startDestination: String
 ) {
-    val navController = rememberNavController()
+    val rootNavController = rememberNavController()
 
     NavHost(
-        navController = navController,
+        navController = rootNavController,
         startDestination = startDestination
     ) {
 
         composable(AppRoutes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(AppRoutes.HOME) {
-                        popUpTo(AppRoutes.LOGIN) {
-                            inclusive = true
-                        }
+                    rootNavController.navigate(AppRoutes.MAIN) {
+                        popUpTo(AppRoutes.LOGIN) { inclusive = true }
                     }
                 }
             )
         }
 
-        composable(AppRoutes.HOME) {
-            val viewModel: HomeViewModel = koinViewModel()
+        composable(AppRoutes.MAIN) {
+
+            val homeViewModel: HomeViewModel = koinViewModel()
+
+            val bottomNavController = rememberNavController()
+
             MainScaffold(
-                onLogout = {
-                    viewModel.logout()
-                    navController.navigate(AppRoutes.LOGIN) {
-                        popUpTo(0)
+                navController = bottomNavController
+            ) {
+
+                NavHost(
+                    navController = bottomNavController,
+                    startDestination = AppRoutes.HOME
+                ) {
+
+                    composable(AppRoutes.HOME) {
+                        HomeScreen(
+                            navController = rootNavController,
+                            onLogout = {
+                                homeViewModel.logout()
+                                rootNavController.navigate(AppRoutes.LOGIN) {
+                                    popUpTo(0)
+                                }
+                            },
+                            viewModel = homeViewModel
+                        )
                     }
-                })
+
+                    composable(AppRoutes.CATALOG) {
+                        CatalogScreen()
+                    }
+                }
+            }
         }
 
         composable("${AppRoutes.DETAIL}/{type}/{id}") { backStackEntry ->
@@ -51,13 +75,11 @@ fun AppNavGraph(
             val id = backStackEntry.arguments!!.getString("id")!!
             val type = backStackEntry.arguments!!.getString("type")!!
 
-            val viewModel: DetailViewModel = koinViewModel(
-                parameters = {
-                    parametersOf(id, type)
-                }
-            )
+            val viewModel: DetailViewModel = koinViewModel {
+                parametersOf(id, type)
+            }
 
-            DetailScreen(viewModel = viewModel)
+            DetailScreen(viewModel = viewModel, onBack = { rootNavController.popBackStack() })
         }
     }
 }

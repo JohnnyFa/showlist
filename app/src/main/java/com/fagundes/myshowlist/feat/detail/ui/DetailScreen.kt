@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +29,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import com.fagundes.myshowlist.components.shimmer.PosterShimmer
 import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
 import com.fagundes.myshowlist.feat.detail.vm.DetailUiState
 import com.fagundes.myshowlist.feat.detail.vm.DetailViewModel
@@ -35,21 +39,27 @@ import java.util.Locale
 @Composable
 fun DetailScreen(
     viewModel: DetailViewModel,
+    onBack: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
     when (state) {
         is DetailUiState.Loading -> {
-            // loading / shimmer
+            Box {}
         }
 
         is DetailUiState.Error -> {
-            // error + retry
+            Text(
+                text = (state as DetailUiState.Error).message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
         }
 
         is DetailUiState.Success -> {
             DetailContent(
-                ui = (state as DetailUiState.Success).ui
+                ui = (state as DetailUiState.Success).ui,
+                onBack = onBack
             )
         }
     }
@@ -57,34 +67,41 @@ fun DetailScreen(
 
 @Composable
 fun DetailContent(
-    ui: ContentDetailUi
+    ui: ContentDetailUi,
+    onBack: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
     ) {
-        PosterBanner(imageUrl = ui.imageUrl)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        PosterBanner(
+            imageUrl = ui.imageUrl,
+            onBack = onBack
+        )
 
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp, vertical = 24.dp)
         ) {
+
             Text(
                 text = ui.title,
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            RatingAndTypeRow(rating = ui.rating, type = ui.type)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider()
+            RatingAndTypeRow(
+                rating = ui.rating,
+                type = ui.type
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -95,29 +112,33 @@ fun DetailContent(
     }
 }
 
+
 @Composable
-private fun PosterBanner(imageUrl: String?) {
+private fun PosterBanner(
+    imageUrl: String?,
+    onBack: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(320.dp)
     ) {
-        if (imageUrl != null) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.DarkGray)
-            )
-        }
 
-        // gradient overlay (cinema vibe)
+        SubcomposeAsyncImage(
+            model = imageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+            loading = { PosterShimmer() },
+            error = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                )
+            }
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -125,23 +146,41 @@ private fun PosterBanner(imageUrl: String?) {
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.Black.copy(alpha = 0.85f)
+                            MaterialTheme.colorScheme.surface
                         )
                     )
                 )
         )
+
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .padding(16.dp, top = 24.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
 @Composable
-private fun RatingAndTypeRow(rating: Double?, type: String?) {
+private fun RatingAndTypeRow(
+    rating: Double?,
+    type: String?
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         if (rating != null) {
             Text(
                 text = "⭐ ${String.format(Locale.US, "%.1f", rating)}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -158,17 +197,20 @@ private fun RatingAndTypeRow(rating: Double?, type: String?) {
 
 @Composable
 private fun OverviewSection(overview: String?) {
+    val textColor = MaterialTheme.colorScheme.onSurface
+
     if (!overview.isNullOrBlank()) {
         Text(
             text = overview,
             style = MaterialTheme.typography.bodyMedium,
+            color = textColor,
             lineHeight = 20.sp
         )
     } else {
         Text(
             text = "No description available.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            color = textColor.copy(alpha = 0.6f)
         )
     }
 }

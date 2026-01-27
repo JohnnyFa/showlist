@@ -23,5 +23,8 @@ interface ContentDao {
     suspend fun insert(entity: ContentEntity)
 
     @Query("SELECT * FROM content WHERE category = :category AND lastUpdated > :maxAgeMillis")
-    suspend fun getMoviesByCategory(category: ContentCategory, maxAgeMillis: Long): List<ContentEntity>
+    suspend fun getMoviesByCategory(
+        category: ContentCategory,
+        maxAgeMillis: Long
+    ): List<ContentEntity>
 }

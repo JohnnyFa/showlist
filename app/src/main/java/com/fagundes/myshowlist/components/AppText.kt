@@ -16,7 +16,7 @@ fun AppText(
     modifier: Modifier = Modifier,
     size: TextUnit = 14.sp,
     weight: FontWeight = FontWeight.Normal,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     align: TextAlign = TextAlign.Center,
     letterSpacing: TextUnit = 0.sp
 ) {

@@ -20,16 +20,15 @@ import com.fagundes.myshowlist.components.error.RetryButton
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
 import com.fagundes.myshowlist.feat.home.ui.components.ShowOfTheDaySection
 import com.fagundes.myshowlist.feat.home.ui.components.TrendingNowSection
-import com.fagundes.myshowlist.feat.home.ui.components.shimmer.CarouselSkeleton
-import com.fagundes.myshowlist.feat.home.ui.components.shimmer.ShowOfTheDaySkeleton
+import com.fagundes.myshowlist.feat.home.ui.components.skeleton.CarouselSkeleton
+import com.fagundes.myshowlist.feat.home.ui.components.skeleton.ShowOfTheDaySkeleton
 import com.fagundes.myshowlist.feat.home.vm.HomeUiState
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel,
     onLogout: () -> Unit
 ) {
     val trendingState by viewModel.trendingState.collectAsState()

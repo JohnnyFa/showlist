@@ -24,15 +24,15 @@ class DetailViewModel(
 
     private fun loadDetail() {
         viewModelScope.launch {
-//            repository.getDetail(id, type)
-//                .onSuccess {
-//                    _uiState.value =
-//                        DetailUiState.Success(it.toDetailUi())
-//                }
-//                .onFailure {
-//                    _uiState.value =
-//                        DetailUiState.Error("Failed to load content")
-//                }
+            repository.getContentDetail(id, type)
+                .onSuccess {
+                    _uiState.value =
+                        DetailUiState.Success(it)
+                }
+                .onFailure {
+                    _uiState.value =
+                        DetailUiState.Error("Failed to load content")
+                }
         }
     }
 }
