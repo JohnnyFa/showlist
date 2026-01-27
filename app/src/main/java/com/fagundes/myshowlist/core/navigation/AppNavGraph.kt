@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fagundes.myshowlist.components.MainScaffold
+import com.fagundes.myshowlist.components.bottomnavigation.MainScaffold
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import com.fagundes.myshowlist.feat.login.ui.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel

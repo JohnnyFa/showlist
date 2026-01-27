@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fagundes.myshowlist.components.AppDivider
 import com.fagundes.myshowlist.components.NormalText
 import com.fagundes.myshowlist.core.domain.Movie
 
@@ -26,6 +27,7 @@ fun TrendingNowSection(
     movies: List<Movie>
 ) {
     Column {
+        AppDivider()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -44,6 +46,7 @@ fun TrendingNowSection(
             Spacer(modifier = Modifier.width(12.dp))
             NormalText(text = "Trending Now", size = 24.sp)
         }
+        AppDivider()
         Spacer(modifier = Modifier.height(24.dp))
         MediaCarousel(
             items = movies,

@@ -30,7 +30,7 @@ class HomeViewModel(
         loadShowOfTheDay()
     }
 
-    private fun loadPopular() {
+    fun loadPopular() {
         Log.d("HomeViewModel", "loadPopular called")
         viewModelScope.launch {
             _trendingState.value = HomeUiState.Loading
@@ -46,7 +46,7 @@ class HomeViewModel(
         }
     }
 
-    private fun loadRecommended() {
+    fun loadRecommended() {
         Log.d("HomeViewModel", "loadRecommended called")
         viewModelScope.launch {
             _forYouState.value = HomeUiState.Loading

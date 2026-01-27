@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.components
+package com.fagundes.myshowlist.components.bottomnavigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fagundes.myshowlist.core.navigation.AppRoutes
 
@@ -64,7 +65,7 @@ fun AppBottomNavigation(
 @Composable
 private fun RowScope.BottomIcon(
     selected: Boolean,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit
 ) {
     NavigationBarItem(

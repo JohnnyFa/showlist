@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.fagundes.myshowlist.components.AppDivider
 import com.fagundes.myshowlist.components.NormalText
 import com.fagundes.myshowlist.core.TMDB_IMAGE_BASE
 import com.fagundes.myshowlist.core.domain.Movie
@@ -35,6 +36,7 @@ fun ShowOfTheDaySection(
     movie: Movie
 ) {
     Column {
+        AppDivider()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,8 +55,8 @@ fun ShowOfTheDaySection(
             Spacer(modifier = Modifier.width(12.dp))
             NormalText(text = "Show of the day", size = 24.sp)
         }
+        AppDivider()
         ShowDetails(movie)
-
     }
 }
 

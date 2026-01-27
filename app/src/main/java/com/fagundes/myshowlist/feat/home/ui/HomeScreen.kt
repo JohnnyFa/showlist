@@ -7,18 +7,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.fagundes.myshowlist.components.error.ErrorSection
+import com.fagundes.myshowlist.components.error.RetryButton
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
 import com.fagundes.myshowlist.feat.home.ui.components.ShowOfTheDaySection
 import com.fagundes.myshowlist.feat.home.ui.components.TrendingNowSection
+import com.fagundes.myshowlist.feat.home.ui.components.shimmer.CarouselSkeleton
+import com.fagundes.myshowlist.feat.home.ui.components.shimmer.ShowOfTheDaySkeleton
 import com.fagundes.myshowlist.feat.home.vm.HomeUiState
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,68 +45,68 @@ fun HomeScreen(
 
             item {
                 when (val state = showOfTheDayState) {
-                    HomeUiState.Loading -> {
-                        Text("Loading show of the day...")
-                    }
-
-                    is HomeUiState.Success -> {
+                    HomeUiState.Loading -> ShowOfTheDaySkeleton()
+                    is HomeUiState.Success ->
                         ShowOfTheDaySection(
                             movie = state.data
                         )
-                    }
 
-                    is HomeUiState.Error -> {
-                        Text(state.message)
-                    }
+                    is HomeUiState.Error ->
+                        ErrorSection(
+                            message = "Failed to load trending movies"
+                        ) {
+                            RetryButton(
+                                onClick = { viewModel.loadShowOfTheDay() }
+                            )
+                        }
 
                     else -> Unit
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                AppDivider()
             }
 
             item {
                 when (val state = trendingState) {
-                    HomeUiState.Loading -> {
-                        Text("Loading trending...")
-                    }
+                    HomeUiState.Loading -> CarouselSkeleton()
 
-                    is HomeUiState.Success -> {
+                    is HomeUiState.Success ->
                         TrendingNowSection(
                             movies = state.data
                         )
-                    }
 
-                    is HomeUiState.Error -> {
-                        Text(state.message)
-                    }
+
+                    is HomeUiState.Error ->
+                        ErrorSection(
+                            message = "Failed to load trending movies"
+                        ) {
+                            RetryButton(
+                                onClick = { viewModel.loadPopular() }
+                            )
+                        }
 
                     else -> Unit
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                AppDivider()
             }
 
             item {
                 when (val state = forYouState) {
-                    HomeUiState.Loading -> {
-                        Text("Loading show of the day...")
-                    }
+                    HomeUiState.Loading -> CarouselSkeleton()
 
-                    is HomeUiState.Success -> {
+                    is HomeUiState.Success ->
                         RecommendedForYouSection(
                             movies = state.data
                         )
-                    }
 
-                    is HomeUiState.Error -> {
-                        Text(state.message)
-                    }
+                    is HomeUiState.Error ->
+                        RetryButton(
+                            onClick = { viewModel.loadRecommended() }
+                        )
+
 
                     else -> Unit
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-                AppDivider()
             }
 
             item {
@@ -115,12 +117,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Composable
-fun AppDivider() {
-    HorizontalDivider(
-        thickness = 1.dp,
-        color = Color(0xFFE50914).copy(alpha = 0.35f)
-    )
 }

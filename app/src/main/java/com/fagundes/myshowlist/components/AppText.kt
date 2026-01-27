@@ -93,11 +93,14 @@ fun CaptionText(
 @Composable
 fun ErrorText(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: TextUnit = 14.sp,
+    weight: FontWeight = FontWeight.Normal
 ) {
     AppText(
         text = text,
-        size = 14.sp,
+        size = size,
+        weight = weight,
         color = MaterialTheme.colorScheme.error,
         modifier = modifier
     )

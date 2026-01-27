@@ -1,4 +1,4 @@
-package com.fagundes.myshowlist.components
+package com.fagundes.myshowlist.components.bottomnavigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
