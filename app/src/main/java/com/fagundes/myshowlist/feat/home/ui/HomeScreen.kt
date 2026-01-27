@@ -13,8 +13,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.error.ErrorSection
 import com.fagundes.myshowlist.components.error.RetryButton
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
@@ -57,7 +59,7 @@ fun HomeScreen(
 
                     is HomeUiState.Error ->
                         ErrorSection(
-                            message = "Failed to load trending movies"
+                            message = stringResource(R.string.fail_load_popular_movies)
                         ) {
                             RetryButton(
                                 onClick = { viewModel.loadShowOfTheDay() }
@@ -84,7 +86,7 @@ fun HomeScreen(
 
                     is HomeUiState.Error ->
                         ErrorSection(
-                            message = "Failed to load trending movies"
+                            message = stringResource(R.string.fail_load_recommended)
                         ) {
                             RetryButton(
                                 onClick = { viewModel.loadPopular() }
@@ -122,7 +124,7 @@ fun HomeScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Button(onClick = onLogout) {
-                    Text("Sair")
+                    Text(stringResource(R.string.leave))
                 }
             }
         }

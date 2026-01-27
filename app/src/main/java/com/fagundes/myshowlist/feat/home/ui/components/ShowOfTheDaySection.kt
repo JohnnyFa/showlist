@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.AppDivider
 import com.fagundes.myshowlist.components.NormalText
 import com.fagundes.myshowlist.core.TMDB_IMAGE_BASE
@@ -57,7 +59,7 @@ fun ShowOfTheDaySection(
             Spacer(modifier = Modifier.width(12.dp))
 
             NormalText(
-                text = "Show of the day",
+                text = stringResource(R.string.label_show_of_the_day),
                 size = 24.sp,
                 weight = FontWeight.Bold
             )

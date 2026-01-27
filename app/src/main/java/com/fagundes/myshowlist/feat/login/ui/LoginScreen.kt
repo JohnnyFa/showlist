@@ -136,7 +136,7 @@ fun GoogleLoginButton(
                 )
                 Spacer(Modifier.width(12.dp))
                 AppText(
-                    text = "Continue with Google",
+                    text = stringResource(R.string.continue_with_google),
                     weight = FontWeight.Medium,
                     color = Color.Black
                 )
@@ -158,7 +158,7 @@ fun LoginLoadingPreview() {
 @Composable
 fun LoginErrorPreview() {
     LoginScreenContent(
-        state = LoginUiState.Error("Authentication failed"),
+        state = LoginUiState.Error(stringResource(R.string.authentication_failed)),
         onLoginClick = {}
     )
 }
@@ -198,7 +198,6 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // 🔷 ICON
             Box(
                 modifier = Modifier
                     .size(84.dp)
@@ -223,21 +222,18 @@ fun LoginScreenContent(
 
             Spacer(Modifier.height(24.dp))
 
-            // 🅿️ TITLE
             TitleText(
-                text = "PIXELVISION"
+                text = stringResource(R.string.app_name)
             )
 
             Spacer(Modifier.height(8.dp))
 
-            // 🎬 SUBTITLE
             SubtitleText(
-                text = "Your premium cinema experience"
+                text = stringResource(R.string.your_premium_cinema_experience)
             )
 
             Spacer(Modifier.height(48.dp))
 
-            // 🔐 BUTTON
             GoogleLoginButton(
                 isLoading = state is LoginUiState.Loading,
                 onClick = onLoginClick
@@ -245,12 +241,10 @@ fun LoginScreenContent(
 
             Spacer(Modifier.height(16.dp))
 
-            // 📜 TERMS
             CaptionText(
-                text = "By continuing, you agree to our Terms & Privacy Policy"
+                text = stringResource(R.string.terms_and_privacy_policy_full)
             )
 
-            // ❌ ERROR
             if (state is LoginUiState.Error) {
                 Spacer(Modifier.height(16.dp))
                 ErrorText(text = state.message)

@@ -26,10 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.shimmer.PosterShimmer
 import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
 import com.fagundes.myshowlist.feat.detail.vm.DetailUiState
@@ -208,7 +210,7 @@ private fun OverviewSection(overview: String?) {
         )
     } else {
         Text(
-            text = "No description available.",
+            text = stringResource(R.string.empty_overview),
             style = MaterialTheme.typography.bodyMedium,
             color = textColor.copy(alpha = 0.6f)
         )
