@@ -1,7 +1,7 @@
 package com.fagundes.myshowlist.feat.home.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,16 +33,16 @@ import java.util.Locale
 
 @Composable
 fun ShowOfTheDaySection(
-    movie: Movie
+    movie: Movie,
+    onMovieClick: (Movie) -> Unit
 ) {
     Column {
         AppDivider()
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = Color.Black
-                )
+                .background(Color.Black)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -52,56 +52,76 @@ fun ShowOfTheDaySection(
                 tint = Color.Yellow,
                 modifier = Modifier.size(32.dp)
             )
+
             Spacer(modifier = Modifier.width(12.dp))
-            NormalText(text = "Show of the day", size = 24.sp)
+
+            NormalText(
+                text = "Show of the day",
+                size = 24.sp,
+                weight = FontWeight.Bold
+            )
         }
+
         AppDivider()
-        ShowDetails(movie)
+
+        ShowDetails(
+            movie = movie,
+            onMovieClick = onMovieClick
+        )
     }
 }
 
 @Composable
-fun ShowDetails(movie: Movie) {
+fun ShowDetails(
+    movie: Movie,
+    onMovieClick: (Movie) -> Unit
+) {
     val formattedRating = String.format(Locale.US, "%.1f", movie.rating)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onMovieClick(movie) }
             .padding(bottom = 12.dp)
     ) {
 
-        // IMAGEM (camada única)
-        Box {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("${TMDB_IMAGE_BASE}${movie.posterUrl}")
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("${TMDB_IMAGE_BASE}${movie.posterUrl}")
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp),
+            contentScale = ContentScale.Crop
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // TÍTULO + NOTA
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            NormalText(text = movie.title, size = 14.sp, weight = FontWeight.Bold)
+            NormalText(
+                text = movie.title,
+                size = 14.sp,
+                weight = FontWeight.Bold
+            )
+
             Spacer(modifier = Modifier.weight(1f))
-            NormalText(text = "⭐ $formattedRating", size = 14.sp)
+
+            NormalText(
+                text = "⭐ $formattedRating",
+                size = 14.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // SINOPSE
         NormalText(
             modifier = Modifier.padding(horizontal = 12.dp),
-            text = movie.overview ?: "",
+            text = movie.overview.orEmpty(),
             size = 12.sp,
             align = TextAlign.Start,
             letterSpacing = 1.sp

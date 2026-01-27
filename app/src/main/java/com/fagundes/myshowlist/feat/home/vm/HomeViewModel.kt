@@ -35,7 +35,7 @@ class HomeViewModel(
         viewModelScope.launch {
             _trendingState.value = HomeUiState.Loading
 
-            repository.getPopular()
+            repository.getPopularMovies()
                 .onSuccess {
                     _trendingState.value = HomeUiState.Success(it)
                 }

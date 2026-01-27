@@ -25,7 +25,8 @@ import com.fagundes.myshowlist.ui.theme.RecommendedPurple
 
 @Composable
 fun RecommendedForYouSection(
-    movies: List<Movie>
+    movies: List<Movie>,
+    onMovieClick: (Movie) -> Unit
 ) {
     Column {
         AppDivider()
@@ -51,7 +52,9 @@ fun RecommendedForYouSection(
         Spacer(modifier = Modifier.height(24.dp))
         MediaCarousel(
             items = movies,
-            onItemClick = { /* navegar depois */ }
+            onItemClick = { movie ->
+                onMovieClick(movie)
+            }
         )
     }
 }

@@ -4,4 +4,6 @@ object AppRoutes {
     const val LOGIN = "login"
     const val HOME = "home"
     const val CATALOG = "catalog"
+
+    const val DETAIL = "detail"
 }

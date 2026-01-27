@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.fagundes.myshowlist.components.error.ErrorSection
 import com.fagundes.myshowlist.components.error.RetryButton
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
@@ -27,6 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = koinViewModel(),
     onLogout: () -> Unit
 ) {
@@ -48,7 +50,10 @@ fun HomeScreen(
                     HomeUiState.Loading -> ShowOfTheDaySkeleton()
                     is HomeUiState.Success ->
                         ShowOfTheDaySection(
-                            movie = state.data
+                            movie = state.data,
+                            onMovieClick = { movie ->
+                                navController.navigate("detail/movie/${movie.id}")
+                            }
                         )
 
                     is HomeUiState.Error ->
@@ -71,7 +76,10 @@ fun HomeScreen(
 
                     is HomeUiState.Success ->
                         TrendingNowSection(
-                            movies = state.data
+                            movies = state.data,
+                            onMovieClick = { movie ->
+                                navController.navigate("detail/movie/${movie.id}")
+                            }
                         )
 
 
@@ -95,7 +103,10 @@ fun HomeScreen(
 
                     is HomeUiState.Success ->
                         RecommendedForYouSection(
-                            movies = state.data
+                            movies = state.data,
+                            onMovieClick = { movie ->
+                                navController.navigate("detail/movie/${movie.id}")
+                            }
                         )
 
                     is HomeUiState.Error ->

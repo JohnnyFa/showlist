@@ -32,14 +32,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val tmdbApiKey =
-        localProperties.getProperty("TMDB_API_KEY")
-            ?: error("TMDB_API_KEY not found in local.properties")
+            localProperties.getProperty("TMDB_API_KEY")
+                ?: error("TMDB_API_KEY not found in local.properties")
 
         buildConfigField(
             "String",
             "TMDB_API_KEY",
             "\"$tmdbApiKey\""
         )
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments(
+                    mapOf(
+                        "room.schemaLocation" to
+                                "$projectDir/schemas"
+                    )
+                )
+            }
+        }
     }
 
     buildTypes {

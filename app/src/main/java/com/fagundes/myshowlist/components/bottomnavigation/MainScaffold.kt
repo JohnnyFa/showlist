@@ -49,7 +49,7 @@ fun MainScaffold(onLogout: () -> Unit) {
         ) {
 
             composable(AppRoutes.HOME) {
-                HomeScreen(onLogout = onLogout)
+                HomeScreen(onLogout = onLogout, navController = navController)
             }
 
             composable(AppRoutes.CATALOG) {

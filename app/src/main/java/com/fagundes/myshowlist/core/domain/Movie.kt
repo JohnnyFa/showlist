@@ -1,9 +1,9 @@
 package com.fagundes.myshowlist.core.domain
 
 data class Movie(
-    val id: Int,
-    val title: String,
-    val posterUrl: String?,
-    val rating: Double?,
-    val overview: String?
-)
+    override val id: Int,
+    override val title: String,
+    override val posterUrl: String?,
+    override val overview: String?,
+    override val rating: Double?
+) : Content

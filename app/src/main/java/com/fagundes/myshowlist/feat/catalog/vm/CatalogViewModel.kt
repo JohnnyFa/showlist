@@ -23,7 +23,7 @@ class CatalogViewModel(
 
     private fun loadCatalog() = viewModelScope.launch {
         viewModelScope.launch {
-            val moviesResult = repository.getPopular()
+            val moviesResult = repository.getPopularMovies()
             val animesResult = repository.getAnimes()
 
             if (moviesResult.isSuccess && animesResult.isSuccess) {

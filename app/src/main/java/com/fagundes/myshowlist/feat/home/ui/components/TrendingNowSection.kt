@@ -24,7 +24,8 @@ import com.fagundes.myshowlist.core.domain.Movie
 
 @Composable
 fun TrendingNowSection(
-    movies: List<Movie>
+    movies: List<Movie>,
+    onMovieClick: (Movie) -> Unit
 ) {
     Column {
         AppDivider()
@@ -50,7 +51,9 @@ fun TrendingNowSection(
         Spacer(modifier = Modifier.height(24.dp))
         MediaCarousel(
             items = movies,
-            onItemClick = { /* navegar depois */ }
+            onItemClick = { movie ->
+                onMovieClick(movie)
+            }
         )
     }
 }
