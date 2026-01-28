@@ -29,4 +29,5 @@
     <string name="and"> &amp; </string>
     <string name="terms">Terms</string>
     <string name="privacy">Privacy</string>
+    <string name="favorite">Favorite</string>
 </resources>
