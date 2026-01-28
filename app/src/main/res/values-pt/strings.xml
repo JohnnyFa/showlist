@@ -1,5 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CINE VAULT</string>
+    <string name="your_premium_cinema_experience">Sua experiência premium de cinema</string>
+    <string name="terms_and_privacy_policy_full">
+        Ao continuar, você concorda com nossos Termos &amp; Política de Privacidade
+    </string>
+    <string name="terms_and_privacy_policy">Termos &amp; Política de Privacidade</string>
+    <string name="leave_review">Deixar uma avaliação</string>
+    <string name="leave">Sair</string>
 
+    <string name="action_back">Voltar</string>
 
+    <string name="label_rating">Avaliação</string>
+    <string name="label_type">Tipo</string>
+    <string name="label_for_you">Para você</string>
+    <string name="label_trending_now">Em alta agora</string>
+    <string name="label_show_of_the_day">Destaque do dia</string>
+
+    <string name="empty_overview">Nenhuma descrição disponível.</string>
+
+    <string name="error_generic">Algo deu errado</string>
+    <string name="error_load_content">Falha ao carregar o conteúdo</string>
+    <string name="error_load_detail">Falha ao carregar os detalhes</string>
+
+    <string name="error_no_content">Nenhum conteúdo disponível</string>
+    <string name="error_no_detail">Nenhum detalhe disponível</string>
+    <string name="error_no_internet">Sem conexão com a internet</string>
+
+    <string name="continue_with_google">Continuar com o Google</string>
+    <string name="authentication_failed">Falha na autenticação</string>
+
+    <string name="label_popular_movies">Filmes populares</string>
+    <string name="fail_load_popular_movies">Falha ao carregar filmes populares</string>
+    <string name="fail_load_recommended">Falha ao carregar recomendações</string>
 </resources>
