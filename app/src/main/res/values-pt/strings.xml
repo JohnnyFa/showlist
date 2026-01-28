@@ -32,4 +32,10 @@
     <string name="label_popular_movies">Filmes populares</string>
     <string name="fail_load_popular_movies">Falha ao carregar filmes populares</string>
     <string name="fail_load_recommended">Falha ao carregar recomendações</string>
+    <string name="continue_as_guest">Continuar como Convidado</string>
+    <string name="or">OU</string>
+    <string name="by_continuing">Ao continuar, você concorda com nossos\u00A0</string>
+    <string name="and">\u00A0&amp;\u00A0</string>
+    <string name="terms">Termos</string>
+    <string name="privacy">Política de privacidade</string>
 </resources>

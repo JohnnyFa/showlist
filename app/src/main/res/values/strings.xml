@@ -23,4 +23,10 @@
     <string name="label_popular_movies">Popular Movies</string>
     <string name="fail_load_popular_movies">Failed to load trending movies</string>
     <string name="fail_load_recommended">Failed to load trending movies</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="or">OR</string>
+    <string name="by_continuing">By continuing, you agree to our </string>
+    <string name="and"> &amp; </string>
+    <string name="terms">Terms</string>
+    <string name="privacy">Privacy</string>
 </resources>

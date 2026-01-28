@@ -5,28 +5,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,13 +33,19 @@ import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.feat.login.vm.LoginUiEvent
 import org.koin.compose.viewmodel.koinViewModel
 import android.app.Activity
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import com.fagundes.myshowlist.components.AppText
-import com.fagundes.myshowlist.components.CaptionText
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.res.painterResource
 import com.fagundes.myshowlist.components.ErrorText
-import com.fagundes.myshowlist.components.SubtitleText
-import com.fagundes.myshowlist.components.TitleText
+import com.fagundes.myshowlist.feat.login.ui.components.GoogleLoginButton
+import com.fagundes.myshowlist.feat.login.ui.components.LoginBackgroundDecorations
+import com.fagundes.myshowlist.feat.login.ui.components.OrDivider
+import com.fagundes.myshowlist.feat.login.ui.components.TermsAndPrivacyText
+import com.fagundes.myshowlist.ui.theme.CineVaultGradients
+import com.fagundes.myshowlist.ui.theme.TextMuted
+import com.fagundes.myshowlist.ui.theme.TextPrimary
+import com.fagundes.myshowlist.ui.theme.TextSecondary
 
 @Composable
 fun LoginScreen(
@@ -83,9 +80,7 @@ fun LoginScreen(
                 account.idToken?.let {
                     viewModel.onGoogleTokenReceived(it)
                 }
-            } catch (_: ApiException) {
-                println("ApiException tratar depois")
-            }
+            } catch (_: ApiException) {}
         }
 
     LaunchedEffect(Unit) {
@@ -105,45 +100,97 @@ fun LoginScreen(
 }
 
 @Composable
-fun GoogleLoginButton(
-    isLoading: Boolean,
-    onClick: () -> Unit
+fun LoginScreenContent(
+    state: LoginUiState,
+    onLoginClick: () -> Unit,
+    onContinueAsGuest: () -> Unit = {}
 ) {
-    Button(
-        onClick = onClick,
-        enabled = !isLoading,
-        shape = RoundedCornerShape(14.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White
-        ),
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(54.dp)
-            .shadow(6.dp, RoundedCornerShape(14.dp))
+            .fillMaxSize()
+            .background(CineVaultGradients.SubtleBackground)
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(22.dp),
-                strokeWidth = 2.dp,
-                color = Color.Black
-            )
-        } else {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+
+        LoginBackgroundDecorations()
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Spacer(Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .background(
+                        brush = CineVaultGradients.Brand,
+                        shape = RoundedCornerShape(28.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
-                    imageVector = Icons.Filled.AccountCircle,
+                    painter = painterResource(R.drawable.ic_logo_foreground),
                     contentDescription = null,
-                    tint = Color.Black
-                )
-                Spacer(Modifier.width(12.dp))
-                AppText(
-                    text = stringResource(R.string.continue_with_google),
-                    weight = FontWeight.Medium,
-                    color = Color.Black
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(120.dp)
                 )
             }
+
+            Spacer(Modifier.height(28.dp))
+
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.displayLarge,
+                color = TextPrimary
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = stringResource(R.string.your_premium_cinema_experience),
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextSecondary
+            )
+
+            Spacer(Modifier.height(40.dp))
+
+            GoogleLoginButton(
+                isLoading = state is LoginUiState.Loading,
+                onClick = onLoginClick
+            )
+
+            OrDivider()
+
+            TextButton(
+                onClick = onContinueAsGuest
+            ) {
+                Text(
+                    text = stringResource(R.string.continue_as_guest),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextMuted
+                )
+            }
+
+            if (state is LoginUiState.Error) {
+                Spacer(Modifier.height(16.dp))
+                ErrorText(text = state.message)
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            TermsAndPrivacyText()
         }
     }
 }
+
 
 @Preview(name = "Loading")
 @Composable
@@ -170,85 +217,4 @@ fun LoginScreenPreview() {
         state = LoginUiState.Idle,
         onLoginClick = {}
     )
-}
-
-
-@Composable
-fun LoginScreenContent(
-    state: LoginUiState,
-    onLoginClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF0B0B0F),
-                        Color(0xFF1C1C2E)
-                    )
-                )
-            )
-            .padding(horizontal = 24.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .size(84.dp)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFFE50914),
-                                Color(0xFF9C27B0)
-                            )
-                        ),
-                        shape = RoundedCornerShape(20.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(42.dp)
-                )
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            TitleText(
-                text = stringResource(R.string.app_name)
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            SubtitleText(
-                text = stringResource(R.string.your_premium_cinema_experience)
-            )
-
-            Spacer(Modifier.height(48.dp))
-
-            GoogleLoginButton(
-                isLoading = state is LoginUiState.Loading,
-                onClick = onLoginClick
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            CaptionText(
-                text = stringResource(R.string.terms_and_privacy_policy_full)
-            )
-
-            if (state is LoginUiState.Error) {
-                Spacer(Modifier.height(16.dp))
-                ErrorText(text = state.message)
-            }
-        }
-    }
 }
