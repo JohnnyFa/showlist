@@ -8,6 +8,6 @@ interface ContentRemoteDataSource {
     suspend fun getRecommendedMovies(): List<Movie>
     suspend fun getTopAnimes(): List<Anime>
     suspend fun getShowOfTheDay(): Movie
-    suspend fun getMoviesByCategory(category: String): List<Movie>
+    suspend fun getMoviesByCategory(category: Int): List<Movie>
     suspend fun searchMoviesByName(query: String): List<Movie>
 }

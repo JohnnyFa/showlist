@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fagundes.myshowlist.core.data.repository.ContentRepository
 import com.fagundes.myshowlist.core.domain.Movie
+import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,27 +21,25 @@ class CatalogViewModel(
         loadCatalog()
     }
 
-    fun onSeeAllUpcoming() {
-        //TODO: this function shouldn`t even exist
-    }
+    fun onSeeAllUpcoming() {}
 
     fun retry() {
         _uiState.value = CatalogUiState.Loading
         loadCatalog()
     }
 
-    fun onCategorySelected(category: String) {
+    fun onCategorySelected(category: MovieGenre) {
         val current =
             (_uiState.value as? CatalogUiState.Content)?.ui
                 ?: CatalogContentState()
 
-        if (category == "All") {
+        if (category == MovieGenre.ALL) {
             loadCatalog()
             return
         }
 
         viewModelScope.launch {
-            repository.getMoviesByCategory(category)
+            repository.getMoviesByCategory(category.genreId!!)
                 .onSuccess { movies ->
                     _uiState.value = CatalogUiState.Content(
                         current.copy(
@@ -115,6 +114,6 @@ sealed interface CatalogUiState {
 
 data class CatalogContentState(
     val searchQuery: String = "",
-    val selectedCategory: String = "All",
+    val selectedCategory: MovieGenre = MovieGenre.ALL,
     val movies: List<Movie> = emptyList()
 )

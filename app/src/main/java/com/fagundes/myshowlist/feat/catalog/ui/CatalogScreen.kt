@@ -1,17 +1,22 @@
 package com.fagundes.myshowlist.feat.catalog.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.fagundes.myshowlist.core.domain.Movie
+import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogEmpty
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogError
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogLoading
@@ -65,21 +70,30 @@ fun CatalogScreen(
 
                 Spacer(Modifier.height(24.dp))
 
-                CatalogContent(
-                    movies = ui.movies,
-                    onSeeAllUpcoming = viewModel::onSeeAllUpcoming
-                )
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 120.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+
+                    item {
+                        CatalogContent(
+                            movies = ui.movies,
+                            onSeeAllUpcoming = viewModel::onSeeAllUpcoming
+                        )
+                    }
+                }
             }
         }
     }
 }
 
+
 @Composable
 private fun CatalogHeader(
     searchQuery: String,
-    selectedCategory: String,
+    selectedCategory: MovieGenre,
     onSearchChange: (String) -> Unit,
-    onCategorySelected: (String) -> Unit
+    onCategorySelected: (MovieGenre) -> Unit
 ) {
     CatalogSearchBar(
         value = searchQuery,
@@ -99,16 +113,20 @@ fun CatalogContent(
     movies: List<Movie>,
     onSeeAllUpcoming: () -> Unit
 ) {
-    Column {
+    val featuredMovie = remember(movies) {
+        movies.randomOrNull()
+    }
 
-        UpcomingHighlightCard(
-            onSeeAll = onSeeAllUpcoming
-        )
+    UpcomingHighlightCard(
+        movie = featuredMovie,
+        onSeeAll = onSeeAllUpcoming
+    )
 
-        Spacer(Modifier.height(24.dp))
+    Spacer(Modifier.height(24.dp))
 
-        movies.forEach { movie ->
+    movies
+        .filterNot { it.id == featuredMovie?.id }
+        .forEach { movie ->
             UpcomingMovieItem(movie)
         }
-    }
 }

@@ -37,7 +37,7 @@ class MovieApi(
             }
             .body()
     }
-    suspend fun getMoviesByCategory(category: String): TmdbResponse {
+    suspend fun getMoviesByCategory(category: Int): TmdbResponse {
         return client
             .get("https://api.themoviedb.org/3/movie/upcoming") {
                 parameter("api_key", BuildConfig.TMDB_API_KEY)

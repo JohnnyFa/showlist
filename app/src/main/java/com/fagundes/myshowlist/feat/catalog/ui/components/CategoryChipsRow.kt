@@ -22,24 +22,23 @@ import com.fagundes.myshowlist.ui.theme.TextSecondary
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
 
 @Composable
 fun CategoryChipsRow(
-    selectedCategory: String,
-    onCategorySelected: (String) -> Unit
+    selectedCategory: MovieGenre,
+    onCategorySelected: (MovieGenre) -> Unit
 ) {
-    val categories = listOf(
-        "All", "Action", "Drama", "Comedy", "Horror", "Sci-Fi", "Thriller"
-    )
+    val categories = MovieGenre.entries
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(categories) { category ->
+        items(categories) { genre ->
             CategoryChip(
-                text = category,
-                selected = category == selectedCategory,
-                onClick = { onCategorySelected(category) }
+                text = genre.displayName,
+                selected = genre == selectedCategory,
+                onClick = { onCategorySelected(genre) }
             )
         }
     }

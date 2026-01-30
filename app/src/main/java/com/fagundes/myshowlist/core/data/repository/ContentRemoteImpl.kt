@@ -90,7 +90,7 @@ class ContentRepositoryImpl(
         return@runCatching entity.toDetailUi()
     }
 
-    override suspend fun getMoviesByCategory(category: String): Result<List<Movie>> =
+    override suspend fun getMoviesByCategory(category: Int): Result<List<Movie>> =
         runCatching {
             remote.getMoviesByCategory(category)
         }

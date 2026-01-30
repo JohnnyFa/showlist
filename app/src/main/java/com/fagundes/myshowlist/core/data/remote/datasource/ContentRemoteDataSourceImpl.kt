@@ -32,7 +32,7 @@ class ContentRemoteDataSourceImpl(
             .random()
             .toDomain()
 
-    override suspend fun getMoviesByCategory(category: String): List<Movie> =
+    override suspend fun getMoviesByCategory(category: Int): List<Movie> =
         movieApi.getMoviesByCategory(category)
             .results
             .map { it.toDomain() }
