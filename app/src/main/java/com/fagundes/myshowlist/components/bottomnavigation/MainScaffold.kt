@@ -19,15 +19,14 @@ private val bottomBarRoutes = setOf(
     AppRoutes.CATALOG
 )
 
-
 @Composable
 fun MainScaffold(
     navController: NavHostController,
     content: @Composable () -> Unit
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStack?.destination?.route
     val showBottomBar = currentRoute in bottomBarRoutes
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -35,14 +34,17 @@ fun MainScaffold(
 
         if (showBottomBar) {
             Box(
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .padding(WindowInsets.navigationBars.asPaddingValues())
             ) {
                 AppBottomNavigation(
                     currentRoute = currentRoute ?: AppRoutes.HOME,
                     onNavigate = { route ->
                         navController.navigate(route) {
-                            popUpTo(AppRoutes.HOME) { saveState = true }
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
                             launchSingleTop = true
                             restoreState = true
                         }

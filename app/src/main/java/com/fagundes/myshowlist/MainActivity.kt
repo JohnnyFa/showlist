@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AppNavGraph(
                         startDestination = if (isUserLoggedIn) {
-                            AppRoutes.MAIN
+                            AppRoutes.HOME
                         } else {
                             AppRoutes.LOGIN
                         }

@@ -17,69 +17,55 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AppNavGraph(
     startDestination: String
 ) {
-    val rootNavController = rememberNavController()
+    val navController = rememberNavController()
 
-    NavHost(
-        navController = rootNavController,
-        startDestination = startDestination
-    ) {
+    MainScaffold(navController = navController) {
 
-        composable(AppRoutes.LOGIN) {
-            LoginScreen(
-                onLoginSuccess = {
-                    rootNavController.navigate(AppRoutes.MAIN) {
-                        popUpTo(AppRoutes.LOGIN) { inclusive = true }
+        NavHost(
+            navController = navController,
+            startDestination = startDestination
+        ) {
+
+            composable(AppRoutes.LOGIN) {
+                LoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(AppRoutes.HOME) {
+                            popUpTo(AppRoutes.LOGIN) { inclusive = true }
+                        }
                     }
-                }
-            )
-        }
-
-        composable(AppRoutes.MAIN) {
-
-            val homeViewModel: HomeViewModel = koinViewModel()
-            val catalogViewModel: CatalogViewModel = koinViewModel()
-
-            val bottomNavController = rememberNavController()
-
-            MainScaffold(
-                navController = bottomNavController
-            ) {
-
-                NavHost(
-                    navController = bottomNavController,
-                    startDestination = AppRoutes.HOME
-                ) {
-
-                    composable(AppRoutes.HOME) {
-                        HomeScreen(
-                            navController = rootNavController,
-                            onLogout = {
-                                homeViewModel.logout()
-                                rootNavController.navigate(AppRoutes.LOGIN) {
-                                    popUpTo(0)
-                                }
-                            },
-                            viewModel = homeViewModel
-                        )
-                    }
-
-                    composable(AppRoutes.CATALOG) {
-                        CatalogScreen(catalogViewModel)
-                    }
-                }
+                )
             }
-        }
 
-        composable("${AppRoutes.DETAIL}/{type}/{id}") { backStackEntry ->
+            composable(AppRoutes.HOME) {
+                val viewModel: HomeViewModel = koinViewModel()
 
-            val id = backStackEntry.arguments!!.getString("id")!!
-            val type = backStackEntry.arguments!!.getString("type")!!
+                HomeScreen(
+                    navController = navController,
+                    viewModel = viewModel,
+                    onLogout = {
+                        viewModel.logout()
+                        navController.navigate(AppRoutes.LOGIN) {
+                            popUpTo(0)
+                        }
+                    }
+                )
+            }
 
-            DetailScreen(
-                id = id,
-                type = type,
-                onBack = { rootNavController.popBackStack() }
-            )
+            composable(AppRoutes.CATALOG) {
+                val viewModel: CatalogViewModel = koinViewModel()
+                CatalogScreen(viewModel)
+            }
+
+            composable("${AppRoutes.DETAIL}/{type}/{id}") { backStackEntry ->
+                val id = backStackEntry.arguments!!.getString("id")!!
+                val type = backStackEntry.arguments!!.getString("type")!!
+
+                DetailScreen(
+                    id = id,
+                    type = type,
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

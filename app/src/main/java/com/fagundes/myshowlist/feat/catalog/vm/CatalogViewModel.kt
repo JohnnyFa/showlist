@@ -24,8 +24,13 @@ class CatalogViewModel(
     private val searchQuery = MutableStateFlow("")
 
     init {
-        loadCatalog()
         observeSearch()
+    }
+
+    fun loadIfNeeded() {
+        if (_uiState.value !is CatalogUiState.Content) {
+            loadCatalog()
+        }
     }
 
     fun onSeeAllUpcoming() {}
@@ -102,7 +107,8 @@ class CatalogViewModel(
             .onSuccess { movies ->
                 _uiState.value = CatalogUiState.Content(
                     CatalogContentState(
-                        movies = movies
+                        movies = movies,
+                        featuredMovie = movies.randomOrNull()
                     )
                 )
             }
@@ -131,5 +137,6 @@ sealed interface CatalogUiState {
 data class CatalogContentState(
     val searchQuery: String = "",
     val selectedCategory: MovieGenre = MovieGenre.ALL,
-    val movies: List<Movie> = emptyList()
+    val movies: List<Movie> = emptyList(),
+    val featuredMovie: Movie? = null
 )
