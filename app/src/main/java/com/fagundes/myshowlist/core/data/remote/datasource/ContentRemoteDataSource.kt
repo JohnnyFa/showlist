@@ -10,4 +10,5 @@ interface ContentRemoteDataSource {
     suspend fun getShowOfTheDay(): Movie
     suspend fun getMoviesByCategory(category: Int): List<Movie>
     suspend fun searchMoviesByName(query: String): List<Movie>
+    suspend fun getUpcomingMovies(): List<Movie>
 }

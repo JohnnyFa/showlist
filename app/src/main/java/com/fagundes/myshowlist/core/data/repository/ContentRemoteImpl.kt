@@ -99,6 +99,11 @@ class ContentRepositoryImpl(
         runCatching {
             remote.searchMoviesByName(query)
         }
+    override suspend fun getUpcomingMovies(): Result<List<Movie>> =
+        runCatching {
+            remote.getUpcomingMovies()
+        }
+
 
     // --- ANIME --- //
     override suspend fun getAnimes(): Result<List<Anime>> =

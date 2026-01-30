@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.fagundes.myshowlist.core.data.repository.ContentRepository
 import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class CatalogViewModel(
@@ -17,8 +21,11 @@ class CatalogViewModel(
         MutableStateFlow<CatalogUiState>(CatalogUiState.Loading)
     val uiState: StateFlow<CatalogUiState> = _uiState
 
+    private val searchQuery = MutableStateFlow("")
+
     init {
         loadCatalog()
+        observeSearch()
     }
 
     fun onSeeAllUpcoming() {}
@@ -60,29 +67,38 @@ class CatalogViewModel(
             (_uiState.value as? CatalogUiState.Content)?.ui
                 ?: CatalogContentState()
 
-        if (query.isBlank()) {
-            loadCatalog()
-            return
-        }
+        _uiState.value = CatalogUiState.Content(
+            current.copy(searchQuery = query)
+        )
 
+        searchQuery.value = query
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearch() {
         viewModelScope.launch {
-            repository.searchMoviesByName(query)
-                .onSuccess { movies ->
-                    _uiState.value = CatalogUiState.Content(
-                        current.copy(
-                            searchQuery = query,
-                            movies = movies
-                        )
-                    )
-                }
-                .onFailure {
-                    _uiState.value = CatalogUiState.Error("Failed to search movies")
+            searchQuery
+                .debounce(600)
+                .filter { it.length >= 2 }
+                .collectLatest { query ->
+                    repository.searchMoviesByName(query)
+                        .onSuccess { movies ->
+                            val current =
+                                (_uiState.value as? CatalogUiState.Content)?.ui
+                                    ?: CatalogContentState()
+
+                            _uiState.value = CatalogUiState.Content(
+                                current.copy(
+                                    movies = movies
+                                )
+                            )
+                        }
                 }
         }
     }
 
     private fun loadCatalog() = viewModelScope.launch {
-        repository.getPopularMovies()
+        repository.getUpcomingMovies()
             .onSuccess { movies ->
                 _uiState.value = CatalogUiState.Content(
                     CatalogContentState(

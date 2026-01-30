@@ -21,11 +21,6 @@ class ContentRemoteDataSourceImpl(
             .results
             .map { it.toDomain() }
 
-    override suspend fun getTopAnimes(): List<Anime> =
-        animeApi.getTopAnimes()
-            .data
-            .map { it.toDomain() }
-
     override suspend fun getShowOfTheDay(): Movie =
         movieApi.getShowOfTheDay()
             .results
@@ -40,5 +35,16 @@ class ContentRemoteDataSourceImpl(
     override suspend fun searchMoviesByName(query: String): List<Movie> =
         movieApi.getMoviesByName(query)
             .results
+            .map { it.toDomain() }
+
+    override suspend fun getUpcomingMovies(): List<Movie> =
+        movieApi.getUpcomingMovies()
+            .results
+            .map { it.toDomain() }
+
+    // --- //ANIME// --- //
+    override suspend fun getTopAnimes(): List<Anime> =
+        animeApi.getTopAnimes()
+            .data
             .map { it.toDomain() }
 }

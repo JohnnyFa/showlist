@@ -37,9 +37,19 @@ class MovieApi(
             }
             .body()
     }
-    suspend fun getMoviesByCategory(category: Int): TmdbResponse {
+
+    suspend fun getUpcomingMovies(): TmdbResponse {
         return client
             .get("https://api.themoviedb.org/3/movie/upcoming") {
+                parameter("api_key", BuildConfig.TMDB_API_KEY)
+                parameter("language", currentTmdbLanguage())
+            }
+            .body()
+    }
+
+    suspend fun getMoviesByCategory(category: Int): TmdbResponse {
+        return client
+            .get("https://api.themoviedb.org/3/discover/movie") {
                 parameter("api_key", BuildConfig.TMDB_API_KEY)
                 parameter("language", currentTmdbLanguage())
                 parameter("with_genres", category)
