@@ -6,13 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagundes.myshowlist.components.bottomnavigation.MainScaffold
 import com.fagundes.myshowlist.feat.catalog.ui.CatalogScreen
+import com.fagundes.myshowlist.feat.catalog.vm.CatalogViewModel
 import com.fagundes.myshowlist.feat.detail.ui.DetailScreen
-import com.fagundes.myshowlist.feat.detail.vm.DetailViewModel
 import com.fagundes.myshowlist.feat.home.ui.HomeScreen
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import com.fagundes.myshowlist.feat.login.ui.LoginScreen
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun AppNavGraph(
@@ -38,6 +37,7 @@ fun AppNavGraph(
         composable(AppRoutes.MAIN) {
 
             val homeViewModel: HomeViewModel = koinViewModel()
+            val catalogViewModel: CatalogViewModel = koinViewModel()
 
             val bottomNavController = rememberNavController()
 
@@ -64,7 +64,7 @@ fun AppNavGraph(
                     }
 
                     composable(AppRoutes.CATALOG) {
-                        CatalogScreen()
+                        CatalogScreen(catalogViewModel)
                     }
                 }
             }
@@ -75,11 +75,11 @@ fun AppNavGraph(
             val id = backStackEntry.arguments!!.getString("id")!!
             val type = backStackEntry.arguments!!.getString("type")!!
 
-            val viewModel: DetailViewModel = koinViewModel {
-                parametersOf(id, type)
-            }
-
-            DetailScreen(viewModel = viewModel, onBack = { rootNavController.popBackStack() })
+            DetailScreen(
+                id = id,
+                type = type,
+                onBack = { rootNavController.popBackStack() }
+            )
         }
     }
 }

@@ -29,11 +29,17 @@ import com.fagundes.myshowlist.feat.detail.vm.DetailViewModel
 import com.fagundes.myshowlist.ui.theme.Background
 import com.fagundes.myshowlist.ui.theme.TextPrimary
 import com.fagundes.myshowlist.ui.theme.TextSecondary
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun DetailScreen(
-    viewModel: DetailViewModel,
-    onBack: () -> Unit
+    id: String,
+    type: String,
+    onBack: () -> Unit,
+    viewModel: DetailViewModel = koinViewModel {
+        parametersOf(id, type)
+    }
 ) {
     val state by viewModel.uiState.collectAsState()
 
