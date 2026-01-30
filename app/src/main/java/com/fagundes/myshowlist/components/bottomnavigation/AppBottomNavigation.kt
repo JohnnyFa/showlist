@@ -34,8 +34,7 @@ fun AppBottomNavigation(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 24.dp),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Row(

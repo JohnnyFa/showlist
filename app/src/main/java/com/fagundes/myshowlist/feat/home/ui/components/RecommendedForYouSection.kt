@@ -1,6 +1,5 @@
 package com.fagundes.myshowlist.feat.home.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,50 +12,53 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.R
-import com.fagundes.myshowlist.components.AppDivider
-import com.fagundes.myshowlist.components.NormalText
 import com.fagundes.myshowlist.core.domain.Movie
-import com.fagundes.myshowlist.ui.theme.RecommendedPurple
+import com.fagundes.myshowlist.ui.theme.AccentGold
+import com.fagundes.myshowlist.ui.theme.TextPrimary
 
 @Composable
 fun RecommendedForYouSection(
     movies: List<Movie>,
     onMovieClick: (Movie) -> Unit
 ) {
-    Column {
-        AppDivider()
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Filled.AutoAwesome,
                 contentDescription = null,
-                tint = RecommendedPurple,
-                modifier = Modifier.size(32.dp)
+                tint = AccentGold,
+                modifier = Modifier.size(20.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            NormalText(text = stringResource(R.string.label_for_you), size = 24.sp)
+
+            Spacer(Modifier.width(8.dp))
+
+            Text(
+                text = stringResource(R.string.label_for_you),
+                style = MaterialTheme.typography.titleLarge,
+                color = TextPrimary
+            )
         }
-        AppDivider()
-        Spacer(modifier = Modifier.height(24.dp))
+
+        Spacer(Modifier.height(16.dp))
+
         MediaCarousel(
             items = movies,
-            onItemClick = { movie ->
-                onMovieClick(movie)
-            }
+            onItemClick = onMovieClick
         )
     }
 }

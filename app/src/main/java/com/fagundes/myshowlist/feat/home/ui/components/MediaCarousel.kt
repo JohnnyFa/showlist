@@ -5,15 +5,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -23,6 +30,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.fagundes.myshowlist.core.TMDB_IMAGE_BASE
 import com.fagundes.myshowlist.core.domain.Movie
+import com.fagundes.myshowlist.ui.theme.AccentGold
+import com.fagundes.myshowlist.ui.theme.TextPrimary
 import java.util.Locale
 
 @Composable
@@ -52,15 +61,15 @@ fun MediaCard(
 
     Column(
         modifier = Modifier
-            .width(120.dp)
+            .width(140.dp)
             .clickable { onClick() }
     ) {
 
         Box(
             modifier = Modifier
-                .height(180.dp)
+                .height(200.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(24.dp))
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -68,26 +77,37 @@ fun MediaCard(
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(10.dp))
 
         Text(
             text = movie.title,
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = TextPrimary
         )
 
-        Text(
-            text = "⭐ $formattedRating",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-        )
+        Spacer(Modifier.height(4.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = null,
+                tint = AccentGold,
+                modifier = Modifier.size(14.dp)
+            )
+
+            Spacer(Modifier.width(4.dp))
+
+            Text(
+                text = formattedRating,
+                style = MaterialTheme.typography.labelSmall,
+                color = AccentGold
+            )
+        }
     }
 }
