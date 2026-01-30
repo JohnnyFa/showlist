@@ -90,9 +90,20 @@ class ContentRepositoryImpl(
         return@runCatching entity.toDetailUi()
     }
 
+    override suspend fun getMoviesByCategory(category: String): Result<List<Movie>> =
+        runCatching {
+            remote.getMoviesByCategory(category)
+        }
 
+    override suspend fun searchMoviesByName(query: String): Result<List<Movie>> =
+        runCatching {
+            remote.searchMoviesByName(query)
+        }
+
+    // --- ANIME --- //
     override suspend fun getAnimes(): Result<List<Anime>> =
         runCatching {
             remote.getTopAnimes()
         }
+
 }

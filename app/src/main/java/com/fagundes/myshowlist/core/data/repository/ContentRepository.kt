@@ -10,4 +10,6 @@ interface ContentRepository {
     suspend fun getAnimes(): Result<List<Anime>>
     suspend fun getShowOfTheDay(): Result<Movie>
     suspend fun getContentDetail(id: String, type: String): Result<ContentDetailUi>
+    suspend fun getMoviesByCategory(category: String): Result<List<Movie>>
+    suspend fun searchMoviesByName(query: String): Result<List<Movie>>
 }
