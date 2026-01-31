@@ -68,14 +68,6 @@ fun CatalogScreen(
                 )
             }
 
-            CatalogUiState.Empty -> {
-                EmptySection(
-                    icon = painterResource(id = R.drawable.ic_empty_list),
-                    title = "Nenhum filme encontrado",
-                    description = "Tente buscar por outro filme ou categoria"
-                )
-            }
-
             is CatalogUiState.Content -> {
                 val ui = (state as CatalogUiState.Content).ui
 
@@ -88,19 +80,27 @@ fun CatalogScreen(
 
                 Spacer(Modifier.height(24.dp))
 
-                LazyColumn(
-                    state = listState,
-                    contentPadding = PaddingValues(bottom = 120.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
-                ) {
+                if (ui.movies.isEmpty()) {
+                    EmptySection(
+                        icon = painterResource(R.drawable.ic_empty_list),
+                        title = "No movies found",
+                        description = "Try searching for something else"
+                    )
+                } else {
+                    LazyColumn(
+                        state = listState,
+                        contentPadding = PaddingValues(bottom = 120.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
 
-                    item {
-                        CatalogContent(
-                            movies = ui.movies,
-                            featuredMovie = ui.featuredMovie,
-                            searchQuery = ui.searchQuery,
-                            onSeeAllUpcoming = viewModel::onSeeAllUpcoming
-                        )
+                        item {
+                            CatalogContent(
+                                movies = ui.movies,
+                                featuredMovie = ui.featuredMovie,
+                                searchQuery = ui.searchQuery,
+                                onSeeAllUpcoming = viewModel::onSeeAllUpcoming
+                            )
+                        }
                     }
                 }
             }
@@ -122,10 +122,12 @@ private fun CatalogHeader(
 
     Spacer(Modifier.height(16.dp))
 
-    CategoryChipsRow(
-        selectedCategory = selectedCategory,
-        onCategorySelected = onCategorySelected
-    )
+    if (searchQuery.isBlank()) {
+        CategoryChipsRow(
+            selectedCategory = selectedCategory,
+            onCategorySelected = onCategorySelected
+        )
+    }
 }
 
 @Composable

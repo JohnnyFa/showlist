@@ -21,6 +21,8 @@ class CatalogViewModel(
         MutableStateFlow<CatalogUiState>(CatalogUiState.Loading)
     val uiState: StateFlow<CatalogUiState> = _uiState
 
+    private var baseMovies: List<Movie> = emptyList()
+
     private val searchQuery = MutableStateFlow("")
 
     init {
@@ -53,10 +55,12 @@ class CatalogViewModel(
         viewModelScope.launch {
             repository.getMoviesByCategory(category.genreId!!)
                 .onSuccess { movies ->
+                    baseMovies = movies
                     _uiState.value = CatalogUiState.Content(
                         current.copy(
                             selectedCategory = category,
-                            movies = movies
+                            movies = movies,
+                            featuredMovie = movies.randomOrNull()
                         )
                     )
                 }
@@ -71,6 +75,16 @@ class CatalogViewModel(
         val current =
             (_uiState.value as? CatalogUiState.Content)?.ui
                 ?: CatalogContentState()
+
+        if (query.isBlank()) {
+            _uiState.value = CatalogUiState.Content(
+                current.copy(
+                    searchQuery = "",
+                    movies = baseMovies
+                )
+            )
+            return
+        }
 
         _uiState.value = CatalogUiState.Content(
             current.copy(searchQuery = query)
@@ -105,6 +119,7 @@ class CatalogViewModel(
     private fun loadCatalog() = viewModelScope.launch {
         repository.getUpcomingMovies()
             .onSuccess { movies ->
+                baseMovies = movies
                 _uiState.value = CatalogUiState.Content(
                     CatalogContentState(
                         movies = movies,
@@ -129,8 +144,6 @@ sealed interface CatalogUiState {
     data class Error(
         val message: String
     ) : CatalogUiState
-
-    object Empty : CatalogUiState
 }
 
 
