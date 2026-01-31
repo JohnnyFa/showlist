@@ -2,6 +2,7 @@ package com.fagundes.myshowlist.core.di
 
 import androidx.room.Room
 import com.fagundes.myshowlist.core.data.local.dao.ContentDao
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.core.data.remote.api.AnimeApi
 import com.fagundes.myshowlist.core.data.remote.api.MovieApi
 import com.fagundes.myshowlist.core.db.AppDatabase
@@ -96,7 +97,7 @@ val appModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::CatalogViewModel)
 
-    viewModel { (id: String, type: String) ->
+    viewModel { (id: Int, type: ContentType) ->
         DetailViewModel(
             id = id,
             type = type,

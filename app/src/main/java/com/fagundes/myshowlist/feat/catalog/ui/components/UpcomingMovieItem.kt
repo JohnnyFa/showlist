@@ -55,7 +55,6 @@ fun UpcomingMovieItem(
 
         Spacer(Modifier.width(16.dp))
 
-        // 📝 Infos
         Column(
             modifier = Modifier.weight(1f)
         ) {

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.EmptySection
 import com.fagundes.myshowlist.components.error.ErrorSection
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogLoading
@@ -33,7 +34,8 @@ import com.fagundes.myshowlist.ui.theme.Background
 
 @Composable
 fun CatalogScreen(
-    viewModel: CatalogViewModel
+    viewModel: CatalogViewModel,
+    onOpenDetail: (Int, ContentType) -> Unit
 ) {
 
     val state by viewModel.uiState.collectAsState()
@@ -94,7 +96,8 @@ fun CatalogScreen(
                                 movies = ui.movies,
                                 featuredMovie = ui.featuredMovie,
                                 searchQuery = ui.searchQuery,
-                                onSeeAllUpcoming = viewModel::onSeeAllUpcoming
+                                onSeeAllUpcoming = viewModel::onSeeAllUpcoming,
+                                onOpenDetail = onOpenDetail
                             )
                         }
                     }
@@ -131,7 +134,8 @@ fun CatalogContent(
     movies: List<Movie>,
     featuredMovie: Movie?,
     searchQuery: String,
-    onSeeAllUpcoming: () -> Unit
+    onSeeAllUpcoming: () -> Unit,
+    onOpenDetail: (Int, ContentType) -> Unit
 ) {
     if (searchQuery.isBlank() || searchQuery.length < 2) {
         UpcomingHighlightCard(
@@ -147,6 +151,9 @@ fun CatalogContent(
     movies
         .filterNot { it.id == featuredMovie?.id }
         .forEach { movie ->
-            UpcomingMovieItem(movie)
+            UpcomingMovieItem(movie,
+                onClick = {
+                    onOpenDetail(movie.id, ContentType.MOVIE)
+            })
         }
 }

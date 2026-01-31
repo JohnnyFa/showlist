@@ -15,9 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.error.ErrorSection
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
 import com.fagundes.myshowlist.feat.home.ui.components.ShowOfTheDaySection
 import com.fagundes.myshowlist.feat.home.ui.components.TrendingNowSection
@@ -28,9 +28,9 @@ import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
     viewModel: HomeViewModel,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onOpenDetail: (Int, ContentType) -> Unit
 ) {
     val trendingState by viewModel.trendingState.collectAsState()
     val forYouState by viewModel.forYouState.collectAsState()
@@ -52,7 +52,7 @@ fun HomeScreen(
                         ShowOfTheDaySection(
                             movie = state.data,
                             onMovieClick = { movie ->
-                                navController.navigate("detail/movie/${movie.id}")
+                                onOpenDetail(movie.id, ContentType.MOVIE)
                             }
                         )
 
@@ -74,7 +74,7 @@ fun HomeScreen(
                         TrendingNowSection(
                             movies = state.data,
                             onMovieClick = { movie ->
-                                navController.navigate("detail/movie/${movie.id}")
+                                onOpenDetail(movie.id, ContentType.MOVIE)
                             }
                         )
 
@@ -97,7 +97,7 @@ fun HomeScreen(
                         RecommendedForYouSection(
                             movies = state.data,
                             onMovieClick = { movie ->
-                                navController.navigate("detail/movie/${movie.id}")
+                                onOpenDetail(movie.id, ContentType.MOVIE)
                             }
                         )
 

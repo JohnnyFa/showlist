@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.R
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
 import com.fagundes.myshowlist.feat.detail.ui.components.FavoriteButton
 import com.fagundes.myshowlist.feat.detail.ui.components.MetaRow
@@ -34,8 +35,8 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun DetailScreen(
-    id: String,
-    type: String,
+    id: Int,
+    type: ContentType,
     onBack: () -> Unit,
     viewModel: DetailViewModel = koinViewModel {
         parametersOf(id, type)

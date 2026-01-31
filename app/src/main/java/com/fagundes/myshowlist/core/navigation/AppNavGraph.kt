@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fagundes.myshowlist.components.bottomnavigation.MainScaffold
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.feat.catalog.ui.CatalogScreen
 import com.fagundes.myshowlist.feat.catalog.vm.CatalogViewModel
 import com.fagundes.myshowlist.feat.detail.ui.DetailScreen
@@ -40,8 +41,10 @@ fun AppNavGraph(
                 val viewModel: HomeViewModel = koinViewModel()
 
                 HomeScreen(
-                    navController = navController,
                     viewModel = viewModel,
+                    onOpenDetail = { id, type ->
+                        navController.navigate(AppRoutes.detail(id, type))
+                    },
                     onLogout = {
                         viewModel.logout()
                         navController.navigate(AppRoutes.LOGIN) {
@@ -53,12 +56,17 @@ fun AppNavGraph(
 
             composable(AppRoutes.CATALOG) {
                 val viewModel: CatalogViewModel = koinViewModel()
-                CatalogScreen(viewModel)
+                CatalogScreen(viewModel, onOpenDetail = { id, type ->
+                    navController.navigate(AppRoutes.detail(id, type))
+                })
             }
 
-            composable("${AppRoutes.DETAIL}/{type}/{id}") { backStackEntry ->
-                val id = backStackEntry.arguments!!.getString("id")!!
-                val type = backStackEntry.arguments!!.getString("type")!!
+            composable(AppRoutes.DETAIL) { backStackEntry ->
+                val id = backStackEntry.arguments!!.getString("id")!!.toInt()
+
+                val type = ContentType.valueOf(
+                    backStackEntry.arguments!!.getString("type")!!
+                )
 
                 DetailScreen(
                     id = id,
