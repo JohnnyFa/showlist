@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,9 +35,6 @@ import com.fagundes.myshowlist.ui.theme.Background
 fun CatalogScreen(
     viewModel: CatalogViewModel
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.loadIfNeeded()
-    }
 
     val state by viewModel.uiState.collectAsState()
 

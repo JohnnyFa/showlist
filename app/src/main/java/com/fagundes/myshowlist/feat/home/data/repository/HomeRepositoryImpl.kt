@@ -1,22 +1,18 @@
-package com.fagundes.myshowlist.core.data.repository
+package com.fagundes.myshowlist.feat.home.data.repository
 
 import android.util.Log
 import com.fagundes.myshowlist.core.CACHE_DURATION
-import com.fagundes.myshowlist.core.data.local.datasource.ContentLocalDataSource
 import com.fagundes.myshowlist.core.data.local.enum.ContentCategory
 import com.fagundes.myshowlist.core.data.local.enum.ContentType
-import com.fagundes.myshowlist.core.data.local.mapper.toDetailUi
 import com.fagundes.myshowlist.core.data.local.mapper.toEntity
-import com.fagundes.myshowlist.core.data.remote.datasource.ContentRemoteDataSource
-import com.fagundes.myshowlist.core.domain.Anime
 import com.fagundes.myshowlist.core.domain.Movie
-import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
+import com.fagundes.myshowlist.feat.home.data.local.datasource.HomeLocalDataSource
+import com.fagundes.myshowlist.feat.home.data.remote.HomeRemoteDataSource
 
-class ContentRepositoryImpl(
-    private val remote: ContentRemoteDataSource,
-    private val local: ContentLocalDataSource
-) : ContentRepository {
-
+class HomeRepositoryImpl(
+    private val local: HomeLocalDataSource,
+    private val remote: HomeRemoteDataSource
+): HomeRepository {
     override suspend fun getPopularMovies(): Result<List<Movie>> =
         runCatching {
             val minValidTime = System.currentTimeMillis() - CACHE_DURATION
@@ -78,37 +74,6 @@ class ContentRepositoryImpl(
     override suspend fun getShowOfTheDay(): Result<Movie> =
         runCatching {
             remote.getShowOfTheDay()
-        }
-
-    override suspend fun getContentDetail(
-        id: String,
-        type: String
-    ): Result<ContentDetailUi> = runCatching {
-
-        val entity = local.getContentById(id.toInt())
-        Log.d("CACHE", "Detail from CACHE")
-        return@runCatching entity.toDetailUi()
-    }
-
-    override suspend fun getMoviesByCategory(category: Int): Result<List<Movie>> =
-        runCatching {
-            remote.getMoviesByCategory(category)
-        }
-
-    override suspend fun searchMoviesByName(query: String): Result<List<Movie>> =
-        runCatching {
-            remote.searchMoviesByName(query)
-        }
-    override suspend fun getUpcomingMovies(): Result<List<Movie>> =
-        runCatching {
-            remote.getUpcomingMovies()
-        }
-
-
-    // --- ANIME --- //
-    override suspend fun getAnimes(): Result<List<Anime>> =
-        runCatching {
-            remote.getTopAnimes()
         }
 
 }

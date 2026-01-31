@@ -2,7 +2,7 @@ package com.fagundes.myshowlist.feat.detail.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fagundes.myshowlist.core.data.repository.ContentRepository
+import com.fagundes.myshowlist.feat.detail.data.repository.DetailRepository
 import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class DetailViewModel(
     private val id: String,
     private val type: String,
-    private val repository: ContentRepository
+    private val repository: DetailRepository
 ) : ViewModel() {
 
     private val _uiState =

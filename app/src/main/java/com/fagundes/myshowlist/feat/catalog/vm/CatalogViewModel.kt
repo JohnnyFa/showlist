@@ -2,8 +2,8 @@ package com.fagundes.myshowlist.feat.catalog.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fagundes.myshowlist.core.data.repository.ContentRepository
 import com.fagundes.myshowlist.core.domain.Movie
+import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepository
 import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class CatalogViewModel(
-    private val repository: ContentRepository
+    private val repository: CatalogRepository
 ) : ViewModel() {
 
     private val _uiState =
@@ -26,13 +26,8 @@ class CatalogViewModel(
     private val searchQuery = MutableStateFlow("")
 
     init {
+        loadCatalog()
         observeSearch()
-    }
-
-    fun loadIfNeeded() {
-        if (_uiState.value !is CatalogUiState.Content) {
-            loadCatalog()
-        }
     }
 
     fun onSeeAllUpcoming() {}

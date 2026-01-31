@@ -3,8 +3,8 @@ package com.fagundes.myshowlist.feat.home.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fagundes.myshowlist.core.data.repository.ContentRepository
 import com.fagundes.myshowlist.core.domain.Movie
+import com.fagundes.myshowlist.feat.home.data.repository.HomeRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val auth: FirebaseAuth,
-    private val repository: ContentRepository
+    private val repository: HomeRepository
 ) : ViewModel() {
 
     private val _trendingState = MutableStateFlow<HomeUiState<List<Movie>>>(HomeUiState.Idle)

@@ -2,19 +2,23 @@ package com.fagundes.myshowlist.core.di
 
 import androidx.room.Room
 import com.fagundes.myshowlist.core.data.local.dao.ContentDao
-import com.fagundes.myshowlist.core.data.local.datasource.ContentLocalDataSource
-import com.fagundes.myshowlist.core.data.local.datasource.ContentLocalDataSourceImpl
 import com.fagundes.myshowlist.core.data.remote.api.AnimeApi
 import com.fagundes.myshowlist.core.data.remote.api.MovieApi
-import com.fagundes.myshowlist.core.data.remote.datasource.ContentRemoteDataSource
-import com.fagundes.myshowlist.core.data.remote.datasource.ContentRemoteDataSourceImpl
-import com.fagundes.myshowlist.core.data.repository.ContentRepository
-import com.fagundes.myshowlist.core.data.repository.ContentRepositoryImpl
 import com.fagundes.myshowlist.core.db.AppDatabase
 import com.fagundes.myshowlist.core.network.provideJikanHttpClient
 import com.fagundes.myshowlist.core.network.provideTmdbHttpClient
+import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepository
+import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepositoryImpl
 import com.fagundes.myshowlist.feat.catalog.vm.CatalogViewModel
+import com.fagundes.myshowlist.feat.detail.data.repository.DetailRepository
+import com.fagundes.myshowlist.feat.detail.data.repository.DetailRepositoryImpl
 import com.fagundes.myshowlist.feat.detail.vm.DetailViewModel
+import com.fagundes.myshowlist.feat.home.data.local.datasource.HomeLocalDataSource
+import com.fagundes.myshowlist.feat.home.data.local.datasource.HomeLocalDataSourceImpl
+import com.fagundes.myshowlist.feat.home.data.remote.HomeRemoteDataSource
+import com.fagundes.myshowlist.feat.home.data.remote.HomeRemoteDataSourceImpl
+import com.fagundes.myshowlist.feat.home.data.repository.HomeRepository
+import com.fagundes.myshowlist.feat.home.data.repository.HomeRepositoryImpl
 import com.fagundes.myshowlist.feat.home.vm.HomeViewModel
 import com.fagundes.myshowlist.feat.login.data.FirebaseAuthRepository
 import com.fagundes.myshowlist.feat.login.domain.AuthRepository
@@ -62,24 +66,29 @@ val appModule = module {
     single { AnimeApi(get(jikanClient)) }
 
     // ---------- Remote DataSource ----------
-    single<ContentRemoteDataSource> {
-        ContentRemoteDataSourceImpl(
-            movieApi = get(),
-            animeApi = get()
-        )
+    single<HomeRemoteDataSource> {
+        HomeRemoteDataSourceImpl(movieApi = get())
     }
 
     // ---------- Local DataSource ----------
-    single<ContentLocalDataSource> {
-        ContentLocalDataSourceImpl(get())
+    single<HomeLocalDataSource> {
+        HomeLocalDataSourceImpl(get())
     }
 
     // ---------- Repository ----------
-    single<ContentRepository> {
-        ContentRepositoryImpl(
-            remote = get(),
-            local = get()
+    single<HomeRepository> {
+        HomeRepositoryImpl(
+            local = get(),
+            remote = get()
         )
+    }
+
+    single<CatalogRepository> {
+        CatalogRepositoryImpl(get())
+    }
+
+    single<DetailRepository> {
+        DetailRepositoryImpl(get())
     }
 
     // ---------- ViewModels ----------
