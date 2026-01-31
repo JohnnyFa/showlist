@@ -1,29 +1,32 @@
-package com.fagundes.myshowlist.feat.catalog.ui.components
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+package com.fagundes.myshowlist.components
+
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
-import com.fagundes.myshowlist.R
+import androidx.compose.ui.unit.dp
 import com.fagundes.myshowlist.ui.theme.TextMuted
 import com.fagundes.myshowlist.ui.theme.TextPrimary
 
-
 @Composable
-fun CatalogEmpty() {
+fun EmptySection(icon: Painter, title: String, description: String) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_splash_logo),
+            painter = icon,
             contentDescription = null,
             tint = TextMuted,
             modifier = Modifier.size(80.dp)
@@ -32,7 +35,7 @@ fun CatalogEmpty() {
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "No Movies Found",
+            text = title,
             color = TextPrimary,
             style = MaterialTheme.typography.titleMedium
         )
@@ -40,7 +43,7 @@ fun CatalogEmpty() {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "Try adjusting your filters or search terms.",
+            text = description,
             color = TextMuted,
             textAlign = TextAlign.Center
         )

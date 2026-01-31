@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.fagundes.myshowlist.R
 import com.fagundes.myshowlist.components.error.ErrorSection
-import com.fagundes.myshowlist.components.error.RetryButton
 import com.fagundes.myshowlist.feat.home.ui.components.RecommendedForYouSection
 import com.fagundes.myshowlist.feat.home.ui.components.ShowOfTheDaySection
 import com.fagundes.myshowlist.feat.home.ui.components.TrendingNowSection
@@ -59,12 +58,8 @@ fun HomeScreen(
 
                     is HomeUiState.Error ->
                         ErrorSection(
-                            message = stringResource(R.string.fail_load_popular_movies)
-                        ) {
-                            RetryButton(
-                                onClick = { viewModel.loadShowOfTheDay() }
-                            )
-                        }
+                            onRetry = { viewModel.loadShowOfTheDay() }
+                        )
 
                     else -> Unit
                 }
@@ -86,12 +81,8 @@ fun HomeScreen(
 
                     is HomeUiState.Error ->
                         ErrorSection(
-                            message = stringResource(R.string.fail_load_recommended)
-                        ) {
-                            RetryButton(
-                                onClick = { viewModel.loadPopular() }
-                            )
-                        }
+                            onRetry = { viewModel.loadPopular() }
+                        )
 
                     else -> Unit
                 }
@@ -111,10 +102,9 @@ fun HomeScreen(
                         )
 
                     is HomeUiState.Error ->
-                        RetryButton(
-                            onClick = { viewModel.loadRecommended() }
+                        ErrorSection(
+                            onRetry = { viewModel.loadRecommended() }
                         )
-
 
                     else -> Unit
                 }

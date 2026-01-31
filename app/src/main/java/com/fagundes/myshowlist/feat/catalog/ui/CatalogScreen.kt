@@ -16,11 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.fagundes.myshowlist.R
+import com.fagundes.myshowlist.components.EmptySection
+import com.fagundes.myshowlist.components.error.ErrorSection
 import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.feat.catalog.domain.MovieGenre
-import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogEmpty
-import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogError
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogLoading
 import com.fagundes.myshowlist.feat.catalog.ui.components.CatalogSearchBar
 import com.fagundes.myshowlist.feat.catalog.ui.components.CategoryChipsRow
@@ -61,13 +63,17 @@ fun CatalogScreen(
             }
 
             is CatalogUiState.Error -> {
-                CatalogError(
+                ErrorSection(
                     onRetry = viewModel::retry
                 )
             }
 
             CatalogUiState.Empty -> {
-                CatalogEmpty()
+                EmptySection(
+                    icon = painterResource(id = R.drawable.ic_empty_list),
+                    title = "Nenhum filme encontrado",
+                    description = "Tente buscar por outro filme ou categoria"
+                )
             }
 
             is CatalogUiState.Content -> {
@@ -101,7 +107,6 @@ fun CatalogScreen(
         }
     }
 }
-
 
 @Composable
 private fun CatalogHeader(
