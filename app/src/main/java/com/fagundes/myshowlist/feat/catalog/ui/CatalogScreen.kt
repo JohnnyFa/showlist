@@ -56,7 +56,6 @@ fun CatalogScreen(
             .fillMaxSize()
             .background(Background)
             .safeDrawingPadding()
-            .padding(horizontal = 20.dp)
     ) {
 
         Spacer(Modifier.height(16.dp))
@@ -132,7 +131,8 @@ private fun CatalogHeader(
 ) {
     CatalogSearchBar(
         value = searchQuery,
-        onSearchChange = onSearchChange
+        onSearchChange = onSearchChange,
+        modifier = Modifier.padding(horizontal = 20.dp)
     )
 
     Spacer(Modifier.height(16.dp))
@@ -156,7 +156,8 @@ fun CatalogContent(
     if (searchQuery.isBlank() || searchQuery.length < 2) {
         UpcomingHighlightCard(
             movie = featuredMovie,
-            onSeeAll = onSeeAllUpcoming
+            onSeeAll = onSeeAllUpcoming,
+            modifier = Modifier.padding(horizontal = 20.dp)
         )
 
         Spacer(Modifier.height(24.dp))
@@ -171,6 +172,8 @@ fun CatalogContent(
                 movie,
                 onClick = {
                     onOpenDetail(movie.id, ContentType.MOVIE)
-                })
+                },
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
         }
 }

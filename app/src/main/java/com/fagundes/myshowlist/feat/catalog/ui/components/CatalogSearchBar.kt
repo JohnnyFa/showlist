@@ -21,12 +21,13 @@ import com.fagundes.myshowlist.ui.theme.TextSecondary
 @Composable
 fun CatalogSearchBar(
     value: String,
-    onSearchChange: (String) -> Unit
+    onSearchChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TextField(
         value = value,
         onValueChange = onSearchChange,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(54.dp),
         placeholder = {

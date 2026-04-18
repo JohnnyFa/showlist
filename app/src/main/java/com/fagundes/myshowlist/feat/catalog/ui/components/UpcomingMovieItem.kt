@@ -30,10 +30,11 @@ import java.util.Locale
 @Composable
 fun UpcomingMovieItem(
     movie: Movie,
-    onClick: (Movie) -> Unit = {}
+    onClick: (Movie) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(movie) }
             .padding(vertical = 12.dp),

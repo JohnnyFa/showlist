@@ -13,10 +13,11 @@ import androidx.compose.ui.unit.dp
 fun ShimmerBox(
     width: Dp,
     height: Dp,
-    radius: Dp = 8.dp
+    radius: Dp = 8.dp,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(width, height)
             .background(
                 brush = shimmerBrush(),

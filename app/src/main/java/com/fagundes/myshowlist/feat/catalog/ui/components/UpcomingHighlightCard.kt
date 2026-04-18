@@ -31,9 +31,10 @@ import com.fagundes.myshowlist.ui.theme.SurfaceElevated
 @Composable
 fun UpcomingHighlightCard(
     movie: Movie?,
-    onSeeAll: () -> Unit
+    onSeeAll: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column {
+    Column(modifier = modifier) {
 
         Row(
             modifier = Modifier.fillMaxWidth(),

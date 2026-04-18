@@ -11,9 +11,11 @@ import androidx.compose.ui.unit.dp
 import com.fagundes.myshowlist.components.shimmer.ShimmerBox
 
 @Composable
-fun UpcomingMovieShimmer() {
+fun UpcomingMovieShimmer(
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ShimmerBox(

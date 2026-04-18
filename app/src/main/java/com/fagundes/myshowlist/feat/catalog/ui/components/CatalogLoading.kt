@@ -22,7 +22,11 @@ import com.fagundes.myshowlist.feat.catalog.ui.components.shimmer.UpcomingMovieS
 fun CatalogLoading() {
     Column {
         // Search Bar Shimmer
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+        ) {
             ShimmerBox(
                 width = 400.dp, // Large enough to fill max width
                 height = 56.dp,
@@ -33,7 +37,10 @@ fun CatalogLoading() {
         Spacer(Modifier.height(16.dp))
 
         // Chips Shimmer
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 20.dp)
+        ) {
             repeat(4) {
                 ShimmerBox(width = 80.dp, height = 32.dp, radius = 20.dp)
             }
@@ -42,7 +49,12 @@ fun CatalogLoading() {
         Spacer(Modifier.height(24.dp))
 
         // Featured Header Shimmer
-        ShimmerBox(width = 120.dp, height = 20.dp, radius = 4.dp)
+        ShimmerBox(
+            width = 120.dp,
+            height = 20.dp,
+            radius = 4.dp,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
 
         Spacer(Modifier.height(12.dp))
 
@@ -51,6 +63,7 @@ fun CatalogLoading() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
+                .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(28.dp))
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -79,7 +92,7 @@ fun CatalogLoading() {
 
         // List items
         repeat(3) {
-            UpcomingMovieShimmer()
+            UpcomingMovieShimmer(modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(Modifier.height(16.dp))
         }
     }

@@ -3,6 +3,7 @@ package com.fagundes.myshowlist.feat.catalog.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import com.fagundes.myshowlist.ui.theme.Divider
 import com.fagundes.myshowlist.ui.theme.Surface
@@ -32,7 +33,8 @@ fun CategoryChipsRow(
     val categories = MovieGenre.entries
 
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
         items(categories) { genre ->
             CategoryChip(
