@@ -4,5 +4,6 @@ enum class ContentCategory {
     POPULAR,
     RECOMMENDED,
     TRENDING,
-    SHOW_OF_THE_DAY
+    SHOW_OF_THE_DAY,
+    UPCOMING
 }

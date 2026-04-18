@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -57,7 +61,14 @@ fun CatalogScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        when (state) {
+    AnimatedContent(
+        targetState = state,
+        transitionSpec = {
+            fadeIn().togetherWith(fadeOut())
+        },
+        label = "CatalogScreenTransition"
+    ) { targetState ->
+        when (targetState) {
             CatalogUiState.Loading -> {
                 CatalogLoading()
             }
@@ -69,43 +80,46 @@ fun CatalogScreen(
             }
 
             is CatalogUiState.Content -> {
-                val ui = (state as CatalogUiState.Content).ui
+                val ui = targetState.ui
 
-                CatalogHeader(
-                    searchQuery = ui.searchQuery,
-                    selectedCategory = ui.selectedCategory,
-                    onSearchChange = viewModel::onSearchChange,
-                    onCategorySelected = viewModel::onCategorySelected
-                )
-
-                Spacer(Modifier.height(24.dp))
-
-                if (ui.movies.isEmpty()) {
-                    EmptySection(
-                        icon = painterResource(R.drawable.ic_empty_list),
-                        title = "No movies found",
-                        description = "Try searching for something else"
+                Column {
+                    CatalogHeader(
+                        searchQuery = ui.searchQuery,
+                        selectedCategory = ui.selectedCategory,
+                        onSearchChange = viewModel::onSearchChange,
+                        onCategorySelected = viewModel::onCategorySelected
                     )
-                } else {
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(bottom = 120.dp),
-                        verticalArrangement = Arrangement.spacedBy(24.dp)
-                    ) {
 
-                        item {
-                            CatalogContent(
-                                movies = ui.movies,
-                                featuredMovie = ui.featuredMovie,
-                                searchQuery = ui.searchQuery,
-                                onSeeAllUpcoming = viewModel::onSeeAllUpcoming,
-                                onOpenDetail = onOpenDetail
-                            )
+                    Spacer(Modifier.height(24.dp))
+
+                    if (ui.movies.isEmpty()) {
+                        EmptySection(
+                            icon = painterResource(R.drawable.ic_empty_list),
+                            title = "No movies found",
+                            description = "Try searching for something else"
+                        )
+                    } else {
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(bottom = 120.dp),
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
+                        ) {
+
+                            item {
+                                CatalogContent(
+                                    movies = ui.movies,
+                                    featuredMovie = ui.featuredMovie,
+                                    searchQuery = ui.searchQuery,
+                                    onSeeAllUpcoming = viewModel::onSeeAllUpcoming,
+                                    onOpenDetail = onOpenDetail
+                                )
+                            }
                         }
                     }
                 }
             }
         }
+    }
     }
 }
 

@@ -85,7 +85,10 @@ val appModule = module {
     }
 
     single<CatalogRepository> {
-        CatalogRepositoryImpl(get())
+        CatalogRepositoryImpl(
+            movieApi = get(),
+            local = get()
+        )
     }
 
     single<DetailRepository> {
