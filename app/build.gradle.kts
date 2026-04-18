@@ -53,6 +53,29 @@ android {
         }
     }
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "ENV", "\"dev\"")
+            resValue("string", "app_name", "\"CINE VAULT Dev\"")
+        }
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            buildConfigField("String", "ENV", "\"staging\"")
+            resValue("string", "app_name", "\"CINE VAULT Staging\"")
+        }
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("String", "ENV", "\"prod\"")
+            resValue("string", "app_name", "\"CINE VAULT\"")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -72,6 +95,18 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    sourceSets {
+        getByName("dev") {
+            assets.srcDir("src/dev/assets")
+        }
+        getByName("staging") {
+            assets.srcDir("src/staging/assets")
+        }
+        getByName("prod") {
+            assets.srcDir("src/prod/assets")
+        }
     }
 }
 

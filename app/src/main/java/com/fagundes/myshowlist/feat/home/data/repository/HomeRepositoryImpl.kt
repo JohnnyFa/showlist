@@ -8,72 +8,86 @@ import com.fagundes.myshowlist.core.data.local.mapper.toEntity
 import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.feat.home.data.local.datasource.HomeLocalDataSource
 import com.fagundes.myshowlist.feat.home.data.remote.HomeRemoteDataSource
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 class HomeRepositoryImpl(
     private val local: HomeLocalDataSource,
-    private val remote: HomeRemoteDataSource
-): HomeRepository {
-    override suspend fun getPopularMovies(): Result<List<Movie>> =
-        runCatching {
-            val minValidTime = System.currentTimeMillis() - CACHE_DURATION
+    private val remote: HomeRemoteDataSource,
+    private val ioDispatcher: CoroutineDispatcher
+) : HomeRepository {
 
-            val cached = local.getMoviesByCategory(
-                category = ContentCategory.POPULAR,
-                maxAgeMillis = minValidTime
-            )
+    override fun observePopularMovies(): Flow<Result<List<Movie>>> =
+        flow {
+            emit(
+                runCatching {
+                    val minValidTime = System.currentTimeMillis() - CACHE_DURATION
 
-            if (cached.isNotEmpty()) {
-                Log.d("CACHE", "Returning popular movies from CACHE")
-                return@runCatching cached
-            }
-            Log.d("CACHE", "Returning popular movies from API")
-
-            val remoteMovies = remote.getPopularMovies()
-
-            local.saveMovies(
-                remoteMovies.map {
-                    it.toEntity(
-                        contentType = ContentType.MOVIE,
-                        category = ContentCategory.POPULAR
+                    val cached = local.getMoviesByCategory(
+                        category = ContentCategory.POPULAR,
+                        maxAgeMillis = minValidTime
                     )
+
+                    if (cached.isNotEmpty()) {
+                        Log.d("CACHE", "Returning popular movies from CACHE")
+                        return@runCatching cached
+                    }
+
+                    Log.d("CACHE", "Returning popular movies from API")
+                    val remoteMovies = remote.getPopularMovies()
+
+                    local.saveMovies(
+                        remoteMovies.map {
+                            it.toEntity(
+                                contentType = ContentType.MOVIE,
+                                category = ContentCategory.POPULAR
+                            )
+                        }
+                    )
+
+                    remoteMovies
                 }
             )
-
-            remoteMovies
-        }
+        }.flowOn(ioDispatcher)
 
     override suspend fun getRecommended(): Result<List<Movie>> =
-        runCatching {
-            val minValidTime = System.currentTimeMillis() - CACHE_DURATION
+        withContext(ioDispatcher) {
+            runCatching {
+                val minValidTime = System.currentTimeMillis() - CACHE_DURATION
 
-            val cached = local.getMoviesByCategory(
-                ContentCategory.RECOMMENDED,
-                minValidTime
-            )
+                val cached = local.getMoviesByCategory(
+                    ContentCategory.RECOMMENDED,
+                    minValidTime
+                )
 
-            if (cached.isNotEmpty()) {
-                Log.d("CACHE", "Returning recommended movies from CACHE")
-                return@runCatching cached
-            }
-
-            Log.d("CACHE", "Returning recommended movies from API")
-            val remoteMovies = remote.getRecommendedMovies()
-
-            local.saveMovies(
-                remoteMovies.map {
-                    it.toEntity(
-                        ContentType.MOVIE,
-                        ContentCategory.RECOMMENDED
-                    )
+                if (cached.isNotEmpty()) {
+                    Log.d("CACHE", "Returning recommended movies from CACHE")
+                    return@runCatching cached
                 }
-            )
 
-            remoteMovies
+                Log.d("CACHE", "Returning recommended movies from API")
+                val remoteMovies = remote.getRecommendedMovies()
+
+                local.saveMovies(
+                    remoteMovies.map {
+                        it.toEntity(
+                            ContentType.MOVIE,
+                            ContentCategory.RECOMMENDED
+                        )
+                    }
+                )
+
+                remoteMovies
+            }
         }
 
     override suspend fun getShowOfTheDay(): Result<Movie> =
-        runCatching {
-            remote.getShowOfTheDay()
+        withContext(ioDispatcher) {
+            runCatching {
+                remote.getShowOfTheDay()
+            }
         }
-
 }

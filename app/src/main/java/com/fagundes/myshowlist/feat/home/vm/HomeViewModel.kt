@@ -8,6 +8,7 @@ import com.fagundes.myshowlist.feat.home.data.repository.HomeRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -35,14 +36,16 @@ class HomeViewModel(
         viewModelScope.launch {
             _trendingState.value = HomeUiState.Loading
 
-            repository.getPopularMovies()
-                .onSuccess {
-                    _trendingState.value = HomeUiState.Success(it)
-                }
-                .onFailure {
-                    _trendingState.value =
-                        HomeUiState.Error("Failed to load trending")
-                }
+            repository.observePopularMovies().collectLatest { result ->
+                result
+                    .onSuccess {
+                        _trendingState.value = HomeUiState.Success(it)
+                    }
+                    .onFailure {
+                        _trendingState.value =
+                            HomeUiState.Error("Failed to load trending")
+                    }
+            }
         }
     }
 

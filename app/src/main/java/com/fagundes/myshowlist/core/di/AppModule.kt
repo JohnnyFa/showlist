@@ -3,11 +3,7 @@ package com.fagundes.myshowlist.core.di
 import androidx.room.Room
 import com.fagundes.myshowlist.core.data.local.dao.ContentDao
 import com.fagundes.myshowlist.core.data.local.enum.ContentType
-import com.fagundes.myshowlist.core.data.remote.api.AnimeApi
-import com.fagundes.myshowlist.core.data.remote.api.MovieApi
 import com.fagundes.myshowlist.core.db.AppDatabase
-import com.fagundes.myshowlist.core.network.provideJikanHttpClient
-import com.fagundes.myshowlist.core.network.provideTmdbHttpClient
 import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepository
 import com.fagundes.myshowlist.feat.catalog.data.repository.CatalogRepositoryImpl
 import com.fagundes.myshowlist.feat.catalog.vm.CatalogViewModel
@@ -26,13 +22,11 @@ import com.fagundes.myshowlist.feat.login.domain.AuthRepository
 import com.fagundes.myshowlist.feat.login.domain.LoginWithGoogleUseCase
 import com.fagundes.myshowlist.feat.login.vm.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
-import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
-
+import org.koin.dsl.module
 
 val appModule = module {
 
@@ -42,13 +36,6 @@ val appModule = module {
     // ---------- Auth ----------
     single<AuthRepository> { FirebaseAuthRepository(get()) }
     factory { LoginWithGoogleUseCase(get()) }
-
-    // ---------- HttpClients ----------
-    val tmdbClient = named("TmdbClient")
-    val jikanClient = named("JikanClient")
-
-    single(tmdbClient) { provideTmdbHttpClient() }
-    single(jikanClient) { provideJikanHttpClient() }
 
     // ---------- Database ----------
     single {
@@ -60,11 +47,6 @@ val appModule = module {
     }
 
     single<ContentDao> { get<AppDatabase>().contentDao() }
-    single { Dispatchers.IO }
-
-    // ---------- APIs ----------
-    single { MovieApi(get(tmdbClient)) }
-    single { AnimeApi(get(jikanClient)) }
 
     // ---------- Remote DataSource ----------
     single<HomeRemoteDataSource> {
@@ -80,7 +62,8 @@ val appModule = module {
     single<HomeRepository> {
         HomeRepositoryImpl(
             local = get(),
-            remote = get()
+            remote = get(),
+            ioDispatcher = get(named(IO_DISPATCHER))
         )
     }
 

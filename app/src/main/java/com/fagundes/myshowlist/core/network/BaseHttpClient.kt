@@ -5,12 +5,12 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import io.ktor.client.plugins.logging.Logger
 
-fun baseHttpClient(): HttpClient =
+fun baseHttpClient(enableLogging: Boolean): HttpClient =
     HttpClient(OkHttp) {
         install(ContentNegotiation) {
             json(
@@ -21,11 +21,13 @@ fun baseHttpClient(): HttpClient =
             )
         }
 
-        install(Logging) {
-            level = LogLevel.ALL
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.d("Ktor", message)
+        if (enableLogging) {
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("Ktor", message)
+                    }
                 }
             }
         }

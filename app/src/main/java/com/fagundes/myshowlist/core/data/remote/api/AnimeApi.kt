@@ -10,7 +10,7 @@ class AnimeApi(
 ) {
     suspend fun getTopAnimes(): JikanResponse {
         return client
-            .get("https://api.jikan.moe/v4/top/anime")
+            .get("top/anime")
             .body()
     }
 }
