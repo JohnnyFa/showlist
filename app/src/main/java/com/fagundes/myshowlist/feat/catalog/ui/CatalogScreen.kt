@@ -153,9 +153,10 @@ fun CatalogContent(
     movies
         .filterNot { it.id == featuredMovie?.id }
         .forEach { movie ->
-            UpcomingMovieItem(movie,
+            UpcomingMovieItem(
+                movie,
                 onClick = {
                     onOpenDetail(movie.id, ContentType.MOVIE)
-            })
+                })
         }
 }
