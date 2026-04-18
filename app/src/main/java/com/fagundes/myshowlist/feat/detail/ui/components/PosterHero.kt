@@ -2,10 +2,13 @@ package com.fagundes.myshowlist.feat.detail.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -57,7 +60,8 @@ fun PosterHero(
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .padding(16.dp, top = 32.dp)
+                .padding(WindowInsets.statusBars.asPaddingValues())
+                .padding(16.dp)
                 .background(
                     color = BlackSoft.copy(alpha = 0.6f),
                     shape = CircleShape
