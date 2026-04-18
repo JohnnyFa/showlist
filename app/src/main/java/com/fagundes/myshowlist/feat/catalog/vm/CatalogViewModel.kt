@@ -21,9 +21,10 @@ class CatalogViewModel(
         MutableStateFlow<CatalogUiState>(CatalogUiState.Loading)
     val uiState: StateFlow<CatalogUiState> = _uiState
 
-    private var baseMovies: List<Movie> = emptyList()
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
 
-    private val searchQuery = MutableStateFlow("")
+    private var baseMovies: List<Movie> = emptyList()
 
     init {
         loadCatalog()
@@ -67,6 +68,8 @@ class CatalogViewModel(
     }
 
     fun onSearchChange(query: String) {
+        _searchQuery.value = query
+
         val current =
             (_uiState.value as? CatalogUiState.Content)?.ui
                 ?: CatalogContentState()
@@ -74,27 +77,31 @@ class CatalogViewModel(
         if (query.isBlank()) {
             _uiState.value = CatalogUiState.Content(
                 current.copy(
-                    searchQuery = "",
                     movies = baseMovies
                 )
             )
             return
         }
-
-        _uiState.value = CatalogUiState.Content(
-            current.copy(searchQuery = query)
-        )
-
-        searchQuery.value = query
     }
 
     @OptIn(FlowPreview::class)
     private fun observeSearch() {
         viewModelScope.launch {
-            searchQuery
+            _searchQuery
                 .debounce(600)
-                .filter { it.length >= 2 }
                 .collectLatest { query ->
+                    if (query.isBlank()) return@collectLatest
+
+                    if (query.length < 2) {
+                        val current =
+                            (_uiState.value as? CatalogUiState.Content)?.ui
+                                ?: CatalogContentState()
+                        _uiState.value = CatalogUiState.Content(
+                            current.copy(movies = baseMovies)
+                        )
+                        return@collectLatest
+                    }
+
                     repository.searchMoviesByName(query)
                         .onSuccess { movies ->
                             val current =
@@ -143,7 +150,6 @@ sealed interface CatalogUiState {
 
 
 data class CatalogContentState(
-    val searchQuery: String = "",
     val selectedCategory: MovieGenre = MovieGenre.ALL,
     val movies: List<Movie> = emptyList(),
     val featuredMovie: Movie? = null

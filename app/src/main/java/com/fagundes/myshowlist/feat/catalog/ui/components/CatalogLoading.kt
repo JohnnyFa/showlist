@@ -19,34 +19,38 @@ import com.fagundes.myshowlist.components.shimmer.ShimmerBox
 import com.fagundes.myshowlist.feat.catalog.ui.components.shimmer.UpcomingMovieShimmer
 
 @Composable
-fun CatalogLoading() {
+fun CatalogLoading(
+    showSearchAndCategories: Boolean = true
+) {
     Column {
-        // Search Bar Shimmer
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        ) {
-            ShimmerBox(
-                width = 400.dp, // Large enough to fill max width
-                height = 56.dp,
-                radius = 16.dp
-            )
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        // Chips Shimmer
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ) {
-            repeat(4) {
-                ShimmerBox(width = 80.dp, height = 32.dp, radius = 20.dp)
+        if (showSearchAndCategories) {
+            // Search Bar Shimmer
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                ShimmerBox(
+                    width = 400.dp, // Large enough to fill max width
+                    height = 56.dp,
+                    radius = 16.dp
+                )
             }
-        }
 
-        Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
+
+            // Chips Shimmer
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(horizontal = 20.dp)
+            ) {
+                repeat(4) {
+                    ShimmerBox(width = 80.dp, height = 32.dp, radius = 20.dp)
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+        }
 
         // Featured Header Shimmer
         ShimmerBox(

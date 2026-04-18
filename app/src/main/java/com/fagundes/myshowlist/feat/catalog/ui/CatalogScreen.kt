@@ -44,6 +44,7 @@ fun CatalogScreen(
 ) {
 
     val state by viewModel.uiState.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
 
     val listState = rememberSaveable(
         saver = LazyListState.Saver
@@ -60,65 +61,66 @@ fun CatalogScreen(
 
         Spacer(Modifier.height(16.dp))
 
-    AnimatedContent(
-        targetState = state,
-        transitionSpec = {
-            fadeIn().togetherWith(fadeOut())
-        },
-        label = "CatalogScreenTransition"
-    ) { targetState ->
-        when (targetState) {
-            CatalogUiState.Loading -> {
-                CatalogLoading()
-            }
+        CatalogHeader(
+            searchQuery = searchQuery,
+            selectedCategory = (state as? CatalogUiState.Content)?.ui?.selectedCategory
+                ?: MovieGenre.ALL,
+            onSearchChange = viewModel::onSearchChange,
+            onCategorySelected = viewModel::onCategorySelected
+        )
 
-            is CatalogUiState.Error -> {
-                ErrorSection(
-                    onRetry = viewModel::retry
-                )
-            }
+        Spacer(Modifier.height(24.dp))
 
-            is CatalogUiState.Content -> {
-                val ui = targetState.ui
+        AnimatedContent(
+            targetState = state,
+            transitionSpec = {
+                fadeIn().togetherWith(fadeOut())
+            },
+            label = "CatalogScreenTransition"
+        ) { targetState ->
+            when (targetState) {
+                CatalogUiState.Loading -> {
+                    CatalogLoading(showSearchAndCategories = false)
+                }
 
-                Column {
-                    CatalogHeader(
-                        searchQuery = ui.searchQuery,
-                        selectedCategory = ui.selectedCategory,
-                        onSearchChange = viewModel::onSearchChange,
-                        onCategorySelected = viewModel::onCategorySelected
+                is CatalogUiState.Error -> {
+                    ErrorSection(
+                        onRetry = viewModel::retry
                     )
+                }
 
-                    Spacer(Modifier.height(24.dp))
+                is CatalogUiState.Content -> {
+                    val ui = targetState.ui
 
-                    if (ui.movies.isEmpty()) {
-                        EmptySection(
-                            icon = painterResource(R.drawable.ic_empty_list),
-                            title = "No movies found",
-                            description = "Try searching for something else"
-                        )
-                    } else {
-                        LazyColumn(
-                            state = listState,
-                            contentPadding = PaddingValues(bottom = 120.dp),
-                            verticalArrangement = Arrangement.spacedBy(24.dp)
-                        ) {
+                    Column {
+                        if (ui.movies.isEmpty()) {
+                            EmptySection(
+                                icon = painterResource(R.drawable.ic_empty_list),
+                                title = "No movies found",
+                                description = "Try searching for something else"
+                            )
+                        } else {
+                            LazyColumn(
+                                state = listState,
+                                contentPadding = PaddingValues(bottom = 120.dp),
+                                verticalArrangement = Arrangement.spacedBy(24.dp)
+                            ) {
 
-                            item {
-                                CatalogContent(
-                                    movies = ui.movies,
-                                    featuredMovie = ui.featuredMovie,
-                                    searchQuery = ui.searchQuery,
-                                    onSeeAllUpcoming = viewModel::onSeeAllUpcoming,
-                                    onOpenDetail = onOpenDetail
-                                )
+                                item {
+                                    CatalogContent(
+                                        movies = ui.movies,
+                                        featuredMovie = ui.featuredMovie,
+                                        searchQuery = searchQuery,
+                                        onSeeAllUpcoming = viewModel::onSeeAllUpcoming,
+                                        onOpenDetail = onOpenDetail
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
     }
 }
 
