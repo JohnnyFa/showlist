@@ -1,17 +1,15 @@
 package com.fagundes.myshowlist.core.network
 
+import com.fagundes.myshowlist.core.config.AppEnvironment
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.URLProtocol
-import io.ktor.http.path
+import io.ktor.http.takeFrom
 
-fun provideJikanHttpClient(): HttpClient =
-    baseHttpClient().config {
+fun provideJikanHttpClient(environment: AppEnvironment): HttpClient =
+    baseHttpClient(enableLogging = environment.enableLogging).config {
         defaultRequest {
             url {
-                protocol = URLProtocol.HTTPS
-                host = "api.jikan.moe"
-                path("v4")
+                takeFrom(environment.animeBaseUrl)
             }
         }
     }
