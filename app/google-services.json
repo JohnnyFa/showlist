@@ -41,6 +41,64 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833327588231:android:e012e79317d8925cd76922",
+        "android_client_info": {
+          "package_name": "com.fagundes.myshowlist.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833327588231-i4rhhno0lukum47t01ii736feagal2rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXbu3H_mhQ6EJe1ck5nBhVmuEr1wKxTVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833327588231-i4rhhno0lukum47t01ii736feagal2rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833327588231:android:713d83e2de6368fdd76922",
+        "android_client_info": {
+          "package_name": "com.fagundes.myshowlist.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833327588231-i4rhhno0lukum47t01ii736feagal2rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXbu3H_mhQ6EJe1ck5nBhVmuEr1wKxTVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833327588231-i4rhhno0lukum47t01ii736feagal2rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
