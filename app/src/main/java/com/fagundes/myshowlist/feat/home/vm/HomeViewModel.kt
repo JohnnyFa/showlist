@@ -25,9 +25,9 @@ class HomeViewModel(
     val showOfTheDay: StateFlow<HomeUiState<Movie>> = _showOfTheDayState
 
     init {
-        loadPopular()
-        loadRecommended()
-        loadShowOfTheDay()
+        if (_trendingState.value !is HomeUiState.Success) loadPopular()
+        if (_forYouState.value !is HomeUiState.Success) loadRecommended()
+        if (_showOfTheDayState.value !is HomeUiState.Success) loadShowOfTheDay()
     }
 
     fun loadPopular() {

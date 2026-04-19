@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class CatalogViewModel(
@@ -27,11 +26,15 @@ class CatalogViewModel(
     private var baseMovies: List<Movie> = emptyList()
 
     init {
-        loadCatalog()
+        if (_uiState.value !is CatalogUiState.Content) {
+            loadCatalog()
+        }
         observeSearch()
     }
 
-    fun onSeeAllUpcoming() {}
+    fun onSeeAllUpcoming() {
+       print("implementacao futura")
+    }
 
     fun retry() {
         _uiState.value = CatalogUiState.Loading
