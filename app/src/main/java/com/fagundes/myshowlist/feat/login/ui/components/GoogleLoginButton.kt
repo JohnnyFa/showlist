@@ -20,12 +20,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
 import com.fagundes.myshowlist.R
 
 @Composable
 fun GoogleLoginButton(
     isLoading: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
@@ -35,9 +37,10 @@ fun GoogleLoginButton(
             containerColor = Color.White,
             contentColor = Color.Black
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
+            .testTag("google_login_button")
     ) {
         if (isLoading) {
             CircularProgressIndicator(

@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import com.fagundes.myshowlist.feat.login.vm.LoginUiState
 import com.fagundes.myshowlist.feat.login.vm.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -151,7 +152,8 @@ fun LoginScreenContent(
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.displayLarge,
-                color = TextPrimary
+                color = TextPrimary,
+                modifier = Modifier.testTag("login_app_name")
             )
 
             Spacer(Modifier.height(8.dp))
@@ -166,13 +168,15 @@ fun LoginScreenContent(
 
             GoogleLoginButton(
                 isLoading = state is LoginUiState.Loading,
-                onClick = onLoginClick
+                onClick = onLoginClick,
+                modifier = Modifier.testTag("login_google_button")
             )
 
             OrDivider()
 
             TextButton(
-                onClick = onContinueAsGuest
+                onClick = onContinueAsGuest,
+                modifier = Modifier.testTag("login_guest_button")
             ) {
                 Text(
                     text = stringResource(R.string.continue_as_guest),
