@@ -1,7 +1,6 @@
 package com.fagundes.myshowlist.core.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -38,16 +37,8 @@ fun AppNavGraph(
                 )
             }
 
-            composable(AppRoutes.HOME) { backStackEntry ->
-                val viewModel: HomeViewModel = koinViewModel(
-                    viewModelStoreOwner = remember(backStackEntry) {
-                        try {
-                            navController.getBackStackEntry(AppRoutes.HOME)
-                        } catch (_: Exception) {
-                            backStackEntry
-                        }
-                    }
-                )
+            composable(AppRoutes.HOME) {
+                val viewModel: HomeViewModel = koinViewModel()
 
                 HomeScreen(
                     viewModel = viewModel,
@@ -63,16 +54,8 @@ fun AppNavGraph(
                 )
             }
 
-            composable(AppRoutes.CATALOG) { backStackEntry ->
-                val viewModel: CatalogViewModel = koinViewModel(
-                    viewModelStoreOwner = remember(backStackEntry) {
-                        try {
-                            navController.getBackStackEntry(AppRoutes.HOME)
-                        } catch (_: Exception) {
-                            backStackEntry
-                        }
-                    }
-                )
+            composable(AppRoutes.CATALOG) {
+                val viewModel: CatalogViewModel = koinViewModel()
                 CatalogScreen(viewModel, onOpenDetail = { id, type ->
                     navController.navigate(AppRoutes.detail(id, type))
                 })
