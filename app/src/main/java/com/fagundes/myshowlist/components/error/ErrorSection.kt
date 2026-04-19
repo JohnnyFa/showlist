@@ -28,11 +28,13 @@ import com.fagundes.myshowlist.ui.theme.NeonRed
 import com.fagundes.myshowlist.ui.theme.TextMuted
 import com.fagundes.myshowlist.ui.theme.TextPrimary
 
+import androidx.compose.ui.platform.testTag
 @Composable
 fun ErrorSection(onRetry: (() -> Unit)) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag("error_section"),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -71,6 +73,7 @@ fun ErrorSection(onRetry: (() -> Unit)) {
                 .height(52.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(CineVaultGradients.Brand)
+                .testTag("error_retry_button")
         ) {
             Text(
                 text = "Retry",
