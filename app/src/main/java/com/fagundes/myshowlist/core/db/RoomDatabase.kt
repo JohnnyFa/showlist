@@ -9,7 +9,7 @@ import com.fagundes.myshowlist.core.data.local.enum.ContentTypeConverter
 
 @Database(
     entities = [ContentEntity::class],
-    version = 1
+    version = 1,
 )
 @TypeConverters(ContentTypeConverter::class)
 

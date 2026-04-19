@@ -18,9 +18,7 @@ val localProperties = Properties().apply {
 
 android {
     namespace = "com.fagundes.myshowlist"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.fagundes.myshowlist"
@@ -32,8 +30,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val tmdbApiKey =
-            localProperties.getProperty("TMDB_API_KEY")
-                ?: error("TMDB_API_KEY not found in local.properties")
+            localProperties.getProperty("TMDB_API_KEY") ?: ""
+
+        if (tmdbApiKey.isEmpty()) {
+            println("WARNING: TMDB_API_KEY not found in local.properties. TMDB API calls will fail.")
+        }
 
         buildConfigField(
             "String",
@@ -62,12 +63,41 @@ android {
             )
         }
     }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "CINE VAULT (Dev)")
+            buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "JIKAN_BASE_URL", "\"https://api.jikan.moe/v4/\"")
+            buildConfigField("Boolean", "LOGGING_ENABLED", "true")
+        }
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            resValue("string", "app_name", "CINE VAULT (Staging)")
+            buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "JIKAN_BASE_URL", "\"https://api.jikan.moe/v4/\"")
+            buildConfigField("Boolean", "LOGGING_ENABLED", "true")
+        }
+        create("prod") {
+            dimension = "environment"
+            resValue("string", "app_name", "CINE VAULT")
+            buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "JIKAN_BASE_URL", "\"https://api.jikan.moe/v4/\"")
+            buildConfigField("Boolean", "LOGGING_ENABLED", "false")
+        }
+    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true

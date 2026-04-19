@@ -10,7 +10,7 @@ fun provideTmdbHttpClient(): HttpClient =
     baseHttpClient().config {
         defaultRequest {
             url {
-                takeFrom("https://api.themoviedb.org/3/")
+                takeFrom(BuildConfig.TMDB_BASE_URL)
                 parameters.append("api_key", BuildConfig.TMDB_API_KEY)
                 parameters.append("language", currentTmdbLanguage())
             }

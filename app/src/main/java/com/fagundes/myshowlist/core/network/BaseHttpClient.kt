@@ -1,6 +1,7 @@
 package com.fagundes.myshowlist.core.network
 
 import android.util.Log
+import com.fagundes.myshowlist.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -21,11 +22,13 @@ fun baseHttpClient(): HttpClient =
             )
         }
 
-        install(Logging) {
-            level = LogLevel.ALL
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.d("Ktor", message)
+        if (BuildConfig.LOGGING_ENABLED) {
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("Ktor", message)
+                    }
                 }
             }
         }
