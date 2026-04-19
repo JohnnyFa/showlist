@@ -73,7 +73,31 @@ class HomeRepositoryImpl(
 
     override suspend fun getShowOfTheDay(): Result<Movie> =
         runCatching {
-            remote.getShowOfTheDay()
+            val minValidTime = System.currentTimeMillis() - CACHE_DURATION
+
+            val cached = local.getMoviesByCategory(
+                ContentCategory.SHOW_OF_THE_DAY,
+                minValidTime
+            )
+
+            if (cached.isNotEmpty()) {
+                Log.d("CACHE", "Returning show of the day from CACHE")
+                return@runCatching cached.first()
+            }
+
+            Log.d("CACHE", "Returning show of the day from API")
+            val remoteMovie = remote.getShowOfTheDay()
+
+            local.saveMovies(
+                listOf(
+                    remoteMovie.toEntity(
+                        ContentType.MOVIE,
+                        ContentCategory.SHOW_OF_THE_DAY
+                    )
+                )
+            )
+
+            remoteMovie
         }
 
 }

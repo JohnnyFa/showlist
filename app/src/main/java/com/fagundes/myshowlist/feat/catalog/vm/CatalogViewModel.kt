@@ -1,5 +1,6 @@
 package com.fagundes.myshowlist.feat.catalog.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fagundes.myshowlist.core.domain.Movie
@@ -26,6 +27,7 @@ class CatalogViewModel(
     private var baseMovies: List<Movie> = emptyList()
 
     init {
+        Log.d("CatalogViewModel", "CatalogViewModel init: ${this.hashCode()}")
         if (_uiState.value !is CatalogUiState.Content) {
             loadCatalog()
         }

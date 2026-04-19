@@ -150,7 +150,7 @@ fun LoginScreenContent(
             Spacer(Modifier.height(28.dp))
 
             Text(
-                text = stringResource(R.string.app_name),
+                text = "Cine Vault",
                 style = MaterialTheme.typography.displayLarge,
                 color = TextPrimary,
                 modifier = Modifier.testTag("login_app_name")

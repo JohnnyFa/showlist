@@ -20,9 +20,10 @@ import com.fagundes.myshowlist.feat.catalog.ui.components.shimmer.UpcomingMovieS
 
 @Composable
 fun CatalogLoading(
+    modifier: Modifier = Modifier,
     showSearchAndCategories: Boolean = true
 ) {
-    Column {
+    Column(modifier = modifier) {
         if (showSearchAndCategories) {
             // Search Bar Shimmer
             Box(

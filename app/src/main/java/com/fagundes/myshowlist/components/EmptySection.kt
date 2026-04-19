@@ -19,9 +19,14 @@ import com.fagundes.myshowlist.ui.theme.TextMuted
 import com.fagundes.myshowlist.ui.theme.TextPrimary
 
 @Composable
-fun EmptySection(icon: Painter, title: String, description: String) {
+fun EmptySection(
+    icon: Painter,
+    title: String,
+    description: String,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -30,9 +30,9 @@ import com.fagundes.myshowlist.ui.theme.TextPrimary
 
 import androidx.compose.ui.platform.testTag
 @Composable
-fun ErrorSection(onRetry: (() -> Unit)) {
+fun ErrorSection(onRetry: (() -> Unit), modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("error_section"),
         horizontalAlignment = Alignment.CenterHorizontally,
