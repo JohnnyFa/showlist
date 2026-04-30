@@ -1,4 +1,4 @@
-# Cine Vault
+# Cine Vault - Movie helper
 
 MyShowList (branded as **Cine Vault**) is a modern Android application for discovering and tracking movies and anime. It leverages the TMDB API for movie data and the Jikan API for anime information.
 
