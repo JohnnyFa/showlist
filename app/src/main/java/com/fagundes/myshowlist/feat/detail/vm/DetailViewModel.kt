@@ -30,6 +30,7 @@ class DetailViewModel(
 
     private val _events = MutableSharedFlow<DetailEvent>()
     val events: SharedFlow<DetailEvent> = _events.asSharedFlow()
+    private val latestFavoriteState = MutableStateFlow(false)
 
     init {
         observeFavoriteState()
@@ -45,7 +46,7 @@ class DetailViewModel(
                 (state as? DetailUiState.Success)?.copy(isFavoriteLoading = true) ?: state
             }
 
-            toggleFavoriteUseCase(id)
+            toggleFavoriteUseCase(id, type)
                 .onSuccess { isFavorite ->
                     _uiState.update { state ->
                         (state as? DetailUiState.Success)?.copy(isFavoriteLoading = false, isFavorite = isFavorite)
@@ -64,7 +65,8 @@ class DetailViewModel(
 
     private fun observeFavoriteState() {
         viewModelScope.launch {
-            observeFavoriteStateUseCase(id).collect { isFavorite ->
+            observeFavoriteStateUseCase(id, type).collect { isFavorite ->
+                latestFavoriteState.value = isFavorite
                 _uiState.update { state ->
                     (state as? DetailUiState.Success)?.copy(isFavorite = isFavorite) ?: state
                 }
@@ -86,7 +88,10 @@ class DetailViewModel(
                             rating = it.rating
                         )
                     )
-                    _uiState.value = DetailUiState.Success(ui = it)
+                    _uiState.value = DetailUiState.Success(
+                        ui = it,
+                        isFavorite = latestFavoriteState.value
+                    )
                 }
                 .onFailure {
                     _uiState.value = DetailUiState.Error("Failed to load content")
