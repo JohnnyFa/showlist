@@ -2,6 +2,7 @@ package com.fagundes.myshowlist.feat.detail.data.repository
 
 import com.fagundes.myshowlist.core.data.local.dao.FavoriteDao
 import com.fagundes.myshowlist.core.data.local.entity.FavoriteEntity
+import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.core.data.mapper.toContentDetailUi
 import com.fagundes.myshowlist.core.data.mapper.toDomain
 import com.fagundes.myshowlist.core.data.remote.api.MovieApi
@@ -30,13 +31,13 @@ class DetailRepositoryImpl(
         favoriteCandidates[item.id] = item
     }
 
-    override fun observeFavoriteState(id: Int): Flow<Boolean> =
-        favoriteDao.observeById(id).map { it != null }
+    override fun observeFavoriteState(id: Int, type: ContentType): Flow<Boolean> =
+        favoriteDao.observeById(id, type).map { it != null }
 
-    override suspend fun toggleFavorite(id: Int): Result<Boolean> = runCatching {
-        val isFavorite = favoriteDao.isFavorite(id)
+    override suspend fun toggleFavorite(id: Int, type: ContentType): Result<Boolean> = runCatching {
+        val isFavorite = favoriteDao.isFavorite(id, type)
         if (isFavorite) {
-            favoriteDao.remove(id)
+            favoriteDao.remove(id, type)
             false
         } else {
             val candidate = checkNotNull(favoriteCandidates[id]) { "Favorite candidate not found for id=$id" }
