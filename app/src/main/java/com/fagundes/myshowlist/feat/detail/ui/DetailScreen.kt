@@ -2,7 +2,6 @@ package com.fagundes.myshowlist.feat.detail.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fagundes.myshowlist.R
+import com.fagundes.myshowlist.components.LoadingSection
 import com.fagundes.myshowlist.core.data.local.enum.ContentType
 import com.fagundes.myshowlist.feat.detail.domain.ContentDetailUi
 import com.fagundes.myshowlist.feat.detail.ui.components.FavoriteButton
@@ -60,7 +59,7 @@ fun DetailScreen(
     }
 
     when (state) {
-        is DetailUiState.Loading -> Box(modifier = Modifier.fillMaxSize()) { CircularProgressIndicator(modifier = Modifier.padding(24.dp)) }
+        is DetailUiState.Loading -> LoadingSection()
         is DetailUiState.Error -> {
             Text(
                 text = (state as DetailUiState.Error).message,

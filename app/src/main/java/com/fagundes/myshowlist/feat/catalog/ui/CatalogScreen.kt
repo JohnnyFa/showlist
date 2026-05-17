@@ -190,6 +190,9 @@ fun CatalogContent(
         UpcomingHighlightCard(
             movie = featuredMovie,
             onSeeAll = onSeeAllUpcoming,
+            onClick = { movie ->
+                onOpenDetail(movie.id, ContentType.MOVIE)
+            },
             modifier = Modifier.padding(horizontal = 20.dp)
         )
 
@@ -210,6 +213,7 @@ fun CatalogContent(
             )
         }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun CatalogScreenContentLoadingPreview() {

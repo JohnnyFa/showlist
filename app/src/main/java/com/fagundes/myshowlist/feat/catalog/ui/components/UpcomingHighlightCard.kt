@@ -1,6 +1,7 @@
 package com.fagundes.myshowlist.feat.catalog.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import com.fagundes.myshowlist.ui.theme.SurfaceElevated
 fun UpcomingHighlightCard(
     movie: Movie?,
     onSeeAll: () -> Unit,
+    onClick: (Movie) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -65,18 +67,25 @@ fun UpcomingHighlightCard(
                     .background(SurfaceElevated)
             )
         } else {
-            UpcomingMovieBanner(movie)
+            UpcomingMovieBanner(
+                movie = movie,
+                onClick = onClick
+            )
         }
     }
 }
 
 @Composable
-fun UpcomingMovieBanner(movie: Movie) {
+fun UpcomingMovieBanner(
+    movie: Movie,
+    onClick: (Movie) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(380.dp)
             .clip(RoundedCornerShape(28.dp))
+            .clickable { onClick(movie) }
     ) {
         AsyncImage(
             model = "${TMDB_IMAGE_BASE}${movie.posterUrl}",
@@ -120,4 +129,3 @@ fun UpcomingMovieBanner(movie: Movie) {
         }
     }
 }
-

@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-
 private val CineVaultColorScheme = darkColorScheme(
     primary = AccentGold,
     secondary = AccentOrange,
