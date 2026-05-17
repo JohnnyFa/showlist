@@ -118,11 +118,11 @@ TODO: Add license information.
 
 `android-ci.yml` runs on every pull request and executes:
 - `ktlintCheck`
-- `detekt`
+- `detekt` (reporting mode during adoption)
 - Android `lint`
 - warnings verification (`-PwarningsAsErrors=true`)
 - unit tests (`test`)
-- instrumentation tests (`connectedCheck` on emulator)
+- instrumentation tests (`connectedCheck` on emulator, independent job to avoid being skipped when lint/static-analysis fails)
 - flavor builds:
   - `assembleDevDebug`
   - `assembleStagingDebug`

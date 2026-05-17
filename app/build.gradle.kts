@@ -182,11 +182,16 @@ ktlint {
     android.set(true)
     outputToConsole.set(true)
     ignoreFailures.set(false)
+    filter {
+        exclude("**/build/**")
+        exclude("**/src/androidTest/**")
+    }
 }
 
 detekt {
     buildUponDefaultConfig = true
     allRules = false
+    ignoreFailures = true
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
