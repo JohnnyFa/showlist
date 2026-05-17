@@ -1,13 +1,14 @@
 package com.fagundes.myshowlist.feat.home.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import com.fagundes.myshowlist.core.domain.Movie
 import com.fagundes.myshowlist.feat.home.vm.HomeUiState
 import org.junit.Rule
@@ -28,6 +29,8 @@ class HomeScreenTest {
                 trendingState = HomeUiState.Loading,
                 forYouState = HomeUiState.Loading,
                 showOfTheDayState = HomeUiState.Loading,
+                favoritesState = HomeUiState.Loading,
+                recentsState = HomeUiState.Loading,
                 onOpenDetail = { _, _ -> },
                 onLogout = {},
                 onRetry = HomeRetryActions({}, {}, {})
@@ -46,6 +49,8 @@ class HomeScreenTest {
                 trendingState = HomeUiState.Success(movieList),
                 forYouState = HomeUiState.Success(movieList),
                 showOfTheDayState = HomeUiState.Success(movie),
+                favoritesState = HomeUiState.Success(movieList),
+                recentsState = HomeUiState.Success(movieList),
                 onOpenDetail = { _, _ -> },
                 onLogout = {},
                 onRetry = HomeRetryActions({}, {}, {})
@@ -55,10 +60,14 @@ class HomeScreenTest {
         // We use onAllNodesWithText(movie.title).onFirst() because the same movie might appear in multiple sections
         composeTestRule.onAllNodesWithText("Test Movie", substring = true).onFirst().assertIsDisplayed()
         
-        // Trending section title
-        composeTestRule.onNodeWithText("Trending Now", ignoreCase = true, substring = true).assertIsDisplayed()
-        // For You section title
-        composeTestRule.onNodeWithText("For You", ignoreCase = true, substring = true).assertIsDisplayed()
+        // Scroll to the container instead of searching by text directly while scrolling might be more reliable if items are recycled
+        composeTestRule.onNodeWithTag("home_screen_content")
+            .performScrollToNode(hasTestTag("trending_now_container"))
+        composeTestRule.onNodeWithTag("trending_now_container").assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag("home_screen_content")
+            .performScrollToNode(hasTestTag("for_you_container"))
+        composeTestRule.onNodeWithTag("for_you_container").assertIsDisplayed()
     }
 
     @Test
@@ -69,6 +78,8 @@ class HomeScreenTest {
                 trendingState = HomeUiState.Error("Error"),
                 forYouState = HomeUiState.Error("Error"),
                 showOfTheDayState = HomeUiState.Error("Error"),
+                favoritesState = HomeUiState.Idle,
+                recentsState = HomeUiState.Idle,
                 onOpenDetail = { _, _ -> },
                 onLogout = {},
                 onRetry = HomeRetryActions(
@@ -96,12 +107,17 @@ class HomeScreenTest {
                 trendingState = HomeUiState.Idle,
                 forYouState = HomeUiState.Idle,
                 showOfTheDayState = HomeUiState.Idle,
+                favoritesState = HomeUiState.Idle,
+                recentsState = HomeUiState.Idle,
                 onOpenDetail = { _, _ -> },
                 onLogout = { logoutClicked = true },
                 onRetry = HomeRetryActions({}, {}, {})
             )
         }
 
+        // Scroll to logout button
+        composeTestRule.onNodeWithTag("home_screen_content")
+            .performScrollToNode(hasTestTag("logout_button"))
         composeTestRule.onNodeWithTag("logout_button").performClick()
         assert(logoutClicked)
     }

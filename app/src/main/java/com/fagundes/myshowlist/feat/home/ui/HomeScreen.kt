@@ -76,13 +76,13 @@ fun HomeScreenContent(
     onRetry: HomeRetryActions
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag("home_screen_content")
+        modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("home_screen_content"),
             contentPadding = WindowInsets.statusBars.asPaddingValues()
         ) {
             showOfTheDayItem(showOfTheDayState, onRetry.onRetryShowOfTheDay, onOpenDetail)
